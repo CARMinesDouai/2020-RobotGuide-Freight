@@ -2,7 +2,7 @@
 
 
 Ce projet consiste à ré-actualiser une démonstration robotique existante de robot guide dont une vidéo est disponible *ici>http://car.imt-lille-douai.fr/2014/10/controlling-robots-with-pharos/*.
-Le code de cette démonstration a été écrit en *PhaROS>http://car.imt-lille-douai.fr/category/software/pharos/* i.e. Pharo et ROS pour le robot Robulab.
+Le code de cette démonstration a été écrit en *PhaROS>http://car.imt-lille-douai.fr/category/software/pharos/* i.e. Pharo et ROS pour le robot Robulab et est disponible *ici>https://partage.imt.fr/index.php/s/6Ac6QQdTfS42ene*.
 
 Dans ce projet nous souhaiterions :
 - Porter cette démonstration pour le robot *Freight>https://docs.fetchrobotics.com/*
