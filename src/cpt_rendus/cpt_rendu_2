@@ -5,7 +5,7 @@ Présentation du travail effectué :
 - Brique de déplacement du robot 
 	*Déplacement direct d'un point A vers un point B 
 	*Evitement d'obtacles locaux (Début d'algorithme)
-	*Mapping prêt mais pas encore faisable avec le fetch
+	*Mapping prêt mais pas encore faisable avec le fetch (Batterie du robot problématique)
 	
 - Brique de vision : 
 	*Reconnaissance faciale : Algorithme fonctionnel mais rafraichissement peut être un peu lent 
