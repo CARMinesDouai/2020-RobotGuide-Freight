@@ -1,2 +1,37 @@
-Compte rendu réu 2
+Compte rendu du 10/02/20 - 9h30 : 
 
+Présentation du travail effectué :
+
+- Brique de déplacement du robot 
+	*Déplacement direct d'un point A vers un point B 
+	*Evitement d'obtacles locaux (Début d'algorithme)
+	*Mapping prêt mais pas encore faisable avec le fetch (Batterie du robot problématique)
+	
+- Brique de vision : 
+	*Reconnaissance faciale : Algorithme fonctionnel mais rafraichissement peut être un peu lent 
+	*Reconnaissance de personne : Algorithme fonctionnel
+	*Tracking de la personne : En cours, gestion des vitesses à voir
+
+Remarques sur le travail : 
+
+- Brique de déplacement du robot : 
+	*Donner des points objectifs sous forme de "Pose" (Type ROS Param)
+	*Bien distinguer chaque fonctionnalité par des nodes.
+	*Récuperer plus de points pour le laser -> Peut être faire une moyenne des distances / Récuperer l'objet distant le plus proche 
+	
+- Brique de vision : 
+	*Connaître la méthode utilisée dans l'algo de reconnaissance faciale 
+	*Réfléchir à la nécéssité d'avoir plusieurs caméras lors du guidage d'une personne 
+	*S'informer sur le NeuralStick dans la reconnaissance faciale
+
+- Conception : 
+	*Décider du logiciel à utiliser pour la conception
+
+
+Objectifs de la semaine à venir : 
+	*Affiner la brique d'évitement d'objets locaux
+	*Préciser l'algorithme de robot suiveur 
+	*Suivi des remarques passées précédemments
+	*Début de réfléxion pour ce qui est de la conception
+
+Prochaine réunion prévue le 17/02/20 à 9h30
