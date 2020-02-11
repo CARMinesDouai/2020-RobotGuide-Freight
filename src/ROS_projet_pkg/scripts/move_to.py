@@ -14,12 +14,13 @@ rospy.init_node('move', anonymous=True)
 _trans = tf.TransformListener()
 
 goal_stamped = PoseStamped()
-goal_stamped.pose.position.x = 2
-goal_stamped.pose.position.y = -2
+goal_stamped.pose.position.x = 12
+goal_stamped.pose.position.y = 12
 goal = [goal_stamped.pose.position.x,goal_stamped.pose.position.y]
 goal_reached = False 
 first_orientation = True
-
+rospy.set_param("cmd_vel_init", [0.1,0.3])
+rospy.set_param("cmd_vel_to_add", [0,0])
 
 # Initialize node parrameters (parrameter name, default value)
 def node_parameter(name, default):
@@ -46,23 +47,29 @@ def movement_manager(data):
 	#print(str(goal[0]) + " " + str(goal[1]))
 	print("Angle to reach : " + str(angle_to_reach))
 	
-	avoidance_correction(angle_to_reach, vel_msg)
+	angle_to_reach = angle_correction_for_local_avoid(angle_to_reach)
 
 	orientation(angle_to_reach, vel_msg) 
 	
 	move_forward(pt_goal_base_link, vel_msg, orientation_done)
-	#print(str(pt_goal_base_link))
-
+	print("vel_msg.linear.x : " + str(vel_msg.linear.x) + " vel_msg.angular : " + str(vel_msg.angular.z))	
+	velocity_correction_for_local_avoid(vel_msg)
+	print("vel_msg.linear.x : " + str(vel_msg.linear.x) + " vel_msg.angular : " + str(vel_msg.angular.z))
 	_cmd_pub.publish(vel_msg)
 	
-def avoidance_correction(angle_to_reach, vel_msg):
-	rospy.set_param("cmd_vel_init", [vel_msg.linear.x,vel_msg.angular.z])
+def angle_correction_for_local_avoid(angle_to_reach): 
 	if rospy.has_param('angle_to_add') or not first_orientation : 
 		angle_to_reach = angle_to_reach + rospy.get_param('angle_to_add')
+	return(angle_to_reach)
 
-	if rospy.has_param('cmd_vel_to_add') : 
-		vel_msg.linear.x = vel_msg.linear.x + rospy.get_param('cmd_vel_to_add')[0]
-		vel_msg.angular.z = vel_msg.angular.z + rospy.get_param('cmd_vel_to_add')[1]
+
+def velocity_correction_for_local_avoid( vel_msg):
+	global first_orientation
+	if rospy.has_param('cmd_vel_to_add') and not first_orientation : 
+		if rospy.get_param('cmd_vel_to_add')[0] != 0 : 
+			vel_msg.linear.x = rospy.get_param('cmd_vel_to_add')[0]
+		if rospy.get_param('cmd_vel_to_add')[1] != 0 : 
+			vel_msg.angular.z = rospy.get_param('cmd_vel_to_add')[1]
 
 
 def point_goal_in_base_link(goal):
@@ -99,9 +106,9 @@ def orientation(angle_to_reach, vel_msg):
 	global goal_reached
 	if not goal_reached :
 		if angle_to_reach < 0 :
-			vel_msg.angular.z = -0.3
+			vel_msg.angular.z = -rospy.get_param("cmd_vel_init")[1]
 		else : 
-			vel_msg.angular.z = 0.3
+			vel_msg.angular.z = rospy.get_param("cmd_vel_init")[1]
 	
 
 def move_forward(pt_goal_base_link, vel_msg, orientation_done):
@@ -111,7 +118,7 @@ def move_forward(pt_goal_base_link, vel_msg, orientation_done):
 		first_orientation = False
 		dist = sqrt(pt_goal_base_link.point.x**2 + pt_goal_base_link.point.y**2)
 		if dist > 0.05 : 
-			vel_msg.linear.x = 0.1
+			vel_msg.linear.x = rospy.get_param("cmd_vel_init")[0]
 		else : 
 			goal_reached = True 
 		print(" Aim point distance : " + str(dist))
