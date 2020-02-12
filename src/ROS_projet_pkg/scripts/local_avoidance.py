@@ -15,8 +15,12 @@ rospy.init_node('move', anonymous=True)
 first_orientation = True
 laser_list = []
 angle_to_add = 0
-cmd_vel_to_add = Twist()
-rospy.set_param("cmd_vel_to_add", [0,0])
+rospy.set_param("cmd_vel_init", [0.1,0.3])
+rospy.set_param("cmd_vel_correction", [1,1])
+#rospy.set_param("cmd_vel_to_add", [0,0])
+
+
+
 # Initialize node parrameters (parrameter name, default value)
 def node_parameter(name, default):
     value= default
@@ -31,13 +35,11 @@ _cmd_frame_id= node_parameter('cmd_frame_id', 'base_link')
 def angle_to_add_function(data):
 	global first_orientation 
 	global angle_to_add
-	global cmd_vel_to_add
 	if rospy.has_param("orientation_done"):
 		if rospy.get_param("orientation_done") or first_orientation  : 
 			angle_avoidance_function()
 	angle_decrementation()
 	rospy.set_param("angle_to_add", angle_to_add)
-	rospy.set_param("cmd_vel_to_add", [cmd_vel_to_add.linear.x, cmd_vel_to_add.angular.z])
 	#print("Angle to add : " + str(angle_to_add) )
 
 
@@ -53,7 +55,7 @@ def angle_avoidance_function():
 	#Definition des constante de distances utiles : 
 	left_angle_to_add, right_angle_to_add = 0, 0
 	left_Object_avoid, right_Object_avoid = 0, 0
-	Dmax = 0.3
+	Dmax = 0.5
 	Dcenter = 1
 	Dmin = 0.1
 	#Recuperation des donnees laser utiles 
@@ -61,31 +63,35 @@ def angle_avoidance_function():
 	left_laser_data = []
 	right_laser_data= []
 	center_laser_data = laser_list.ranges[Lengths/2]
+	number_of_data_to_get = 192
 	#Moyenne des distance gauche droite
 	left_mean_obj_dist = 0 
 	right_mean_obj_dist = 0 
 	#Minimum de proximite a gauche et a droite
 	left_min_dist = -1
 	right_min_dist = -1
-	for k in range(24,48):
-		right_laser_data.append(laser_list.ranges[Lengths*k/96])
-	for k in range(72,48,-1) : 
-		left_laser_data.append(laser_list.ranges[Lengths*k/96])
-	last_left_laser_data = laser_list.ranges[Lengths*90/96]
-	print("Last left laser data : " + str(last_left_laser_data))
-	#print(str(center_laser_data))
+	#On prend les donnees laser a partir de 1/8 jusqu'au centre et du centre jusqu a 7/8
+	for k in range(number_of_data_to_get/8,number_of_data_to_get/2):
+		right_laser_data.append(laser_list.ranges[Lengths*k/number_of_data_to_get])
+	for k in range(number_of_data_to_get*7/8,number_of_data_to_get/2,-1) : 
+		left_laser_data.append(laser_list.ranges[Lengths*k/number_of_data_to_get])
+	last_left_laser_data = laser_list.ranges[Lengths*90/number_of_data_to_get]
+	print("Last left laser data : " + str(laser_list.ranges[Lengths*number_of_data_to_get*7/8/number_of_data_to_get]))
+	print(str(center_laser_data))
 
+	lenght_left_list = len(left_laser_data)
+	print (lenght_left_list)
 	#Utilisation des donnees laser utiles 
 	#Step 1 : Detection d'objet proche et augmentation de l'angle d'ecartement
-	for k in range(24): 
+	for k in range(lenght_left_list): 
 		if right_laser_data[k] < Dmax and right_laser_data[k] > Dmin and not isnan(float(right_laser_data[k])) : 
 			right_Object_avoid = right_Object_avoid + 1 
 			#print("Right_laser data number : " + str(k) + " value : " + str(left_laser_data[k]))
-			if angle_to_add < (k+1)*7 : 
-				right_angle_to_add = (k+1)*7
+			if angle_to_add < (k+1)*2 : 
+				right_angle_to_add = (k+1)*2
 				print ("right angle to add : " + str(right_angle_to_add))
 			right_mean_obj_dist = right_mean_obj_dist + right_laser_data[k]
-			if k<23 : 
+			if k<lenght_left_list -1  : 
 				if right_laser_data[k] < right_laser_data[k+1] and not isnan(float(right_laser_data[k+1])) : 
 					right_min_dist = right_laser_data[k]
 				elif right_laser_data[k] > right_laser_data[k+1] and not isnan(float(right_laser_data[k+1])) : 
@@ -95,11 +101,11 @@ def angle_avoidance_function():
 			left_Object_avoid = left_Object_avoid + 1 
 			
 			#print("Left_laser data number : " + str(k) + " value : " + str(left_laser_data[k]))
-			if angle_to_add > -(k+1)*7	:
-				left_angle_to_add = -(k+1)*7	
+			if angle_to_add > -(k+1)*2 	:
+				left_angle_to_add = -(k+1)*2
 				print ("left angle to add  : " + str(left_angle_to_add))
 			left_mean_obj_dist = left_mean_obj_dist + left_laser_data[k]
-			if k<23 : 
+			if k< lenght_left_list - 1  : 
 				if left_laser_data[k] < left_laser_data[k+1] and not isnan(float(left_laser_data[k+1])) : 
 					left_min_dist = left_laser_data[k]
 				elif left_laser_data[k] > left_laser_data[k+1] and not isnan(float(left_laser_data[k+1])) : 
@@ -124,7 +130,7 @@ def angle_avoidance_function():
 		else : 
 			angle_to_add = left_angle_to_add + right_angle_to_add
 	print("Angle to add : " + str(angle_to_add) )
-	#ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin)
+	ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin)
 			
 	
 def angle_decrementation():
@@ -144,34 +150,30 @@ def angle_decrementation():
 
 def ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin):
 	global angle_to_add
-	global cmd_vel_to_add
-	linear, angular = rospy.get_param("cmd_vel_init")[0], rospy.get_param("cmd_vel_init")[1]
+	Int_dist = (Dmax-Dmin)/10
+	#vitesse lineaire variant entre *0.2 et *1 
+	Int_linear = (1.0-0.2)/10
+	#vitesse angulaire variant entre *1 et *2 
+	Int_angular = (2.0-1.0)/10
+	test = False 
+	#linear, angular = rospy.get_param("cmd_vel_actual")[0], rospy.get_param("cmd_vel_actual")[1]
+	linear, angular = 0, 0 
 	if rospy.has_param("cmd_vel_init"):
-		linear, angular = rospy.get_param("cmd_vel_init")[0], rospy.get_param("cmd_vel_init")[1]
-
-		Int_dist = (Dmax-Dmin)/10
-		Int_linear = 1/20
-		Int_angular = 1/10
-		test = False 
 		for k in range(10): 
-			print("left_min_dist > dmin + int_dist*k : " + str(left_min_dist) + ">" +  str(Dmin + Int_dist*k))
-			print("left_min_dist < dmin + int_dist*k+1 : " + str(left_min_dist) + "<" +  str(Dmin + Int_dist*(k+1)))
-			print("angular : " + str(angular))
-			if left_min_dist > Dmin + Int_dist*k and left_min_dist < Dmin + Int_dist*(k+1) :
+			if left_min_dist > Dmin + Int_dist*k and left_min_dist < Dmin + Int_dist*(k+1) and angle_to_add < 0 :
 				test=True
-				
-				cmd_vel_to_add.angular.z = - angular*(0.5+Int_angular*(10-k))
-				print(" OKOKOK : " + str(cmd_vel_to_add.angular.z))
-				print("k : " +Int_angular)
-				cmd_vel_to_add.linear.x = linear*(0.5 + Int_linear*k)
-			elif right_min_dist > Dmin + Int_dist*(k) and right_min_dist < Dmin + Int_dist*(k+1) :
+				angular = (1 + Int_angular*(10-k))
+				linear = 0.2 + Int_linear*k
+			if right_min_dist > Dmin + Int_dist*(k) and right_min_dist < Dmin + Int_dist*(k+1) and angle_to_add > 0 :
 				test=True
-				cmd_vel_to_add.angular.z = angular*(0.5+Int_angular*(10-k))
-				cmd_vel_to_add.linear.x = linear*(0.5 + Int_linear*k)
+				angular = (1+Int_angular*(10-k))
+				linear = linear = (0.2 + Int_linear*k)
 		if not test : 
-			cmd_vel_to_add.angular.z = 0
-			cmd_vel_to_add.linear.x = linear
-		print("cmd_vel_angular : " + str(cmd_vel_to_add.angular.z) + " cmd_vel_linear : " + str(cmd_vel_to_add.linear.x))
+			linear = 1 
+			angular = 1 
+	print("Linear correction : " + str(linear) + " Angular correction : " + str(angular)) 
+	rospy.set_param("cmd_vel_correction", [linear,angular])
+
 if __name__ == '__main__':
 	print("Start move.py")	
 
