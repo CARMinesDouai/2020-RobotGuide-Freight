@@ -71,12 +71,12 @@ def angle_avoidance_function():
 	left_min_dist = -1
 	right_min_dist = -1
 	#On prend les donnees laser a partir de 1/8 jusqu'au centre et du centre jusqu a 7/8
-	for k in range(number_of_data_to_get/8,number_of_data_to_get/2):
+	for k in range(0,number_of_data_to_get/2):
 		right_laser_data.append(laser_list.ranges[Lengths*k/number_of_data_to_get])
-	for k in range(number_of_data_to_get*7/8,number_of_data_to_get/2,-1) : 
+	for k in range(number_of_data_to_get-1,number_of_data_to_get/2,-1) : 
 		left_laser_data.append(laser_list.ranges[Lengths*k/number_of_data_to_get])
-	last_left_laser_data = laser_list.ranges[Lengths*90/number_of_data_to_get]
-	print("Last left laser data : " + str(laser_list.ranges[Lengths*number_of_data_to_get*7/8/number_of_data_to_get]))
+	#last_left_laser_data = laser_list.ranges[Lengths*90/number_of_data_to_get]
+	print("Last left laser data : " + str(laser_list.ranges[Lengths-1]))
 	print(str(center_laser_data))
 
 	lenght_left_list = len(left_laser_data)
@@ -87,8 +87,12 @@ def angle_avoidance_function():
 		if right_laser_data[k] < Dmax and right_laser_data[k] > Dmin and not isnan(float(right_laser_data[k])) : 
 			right_Object_avoid = right_Object_avoid + 1 
 			#print("Right_laser data number : " + str(k) + " value : " + str(left_laser_data[k]))
-			if angle_to_add < (k+1)*2 : 
-				right_angle_to_add = (k+1)*2
+			if k < 48 : 
+				if angle_to_add < (k+1)*3 : 
+					right_angle_to_add = (k+1)*2.5
+			else : 
+				if angle_to_add < 48*3 + (k-48)*1 : 
+					right_angle_to_add = 48*2.5 + (k-48)*1
 				print ("right angle to add : " + str(right_angle_to_add))
 			right_mean_obj_dist = right_mean_obj_dist + right_laser_data[k]
 			if k<lenght_left_list -1  : 
@@ -101,8 +105,12 @@ def angle_avoidance_function():
 			left_Object_avoid = left_Object_avoid + 1 
 			
 			#print("Left_laser data number : " + str(k) + " value : " + str(left_laser_data[k]))
-			if angle_to_add > -(k+1)*2 	:
-				left_angle_to_add = -(k+1)*2
+			if k < 48 : 
+				if angle_to_add < (k+1)*3 : 
+					left_angle_to_add = -(k+1)*2.5
+			else : 
+				if angle_to_add < 48*3 + (k-48)*1 : 
+					left_angle_to_add = -48*2.5 - (k-48)*1
 				print ("left angle to add  : " + str(left_angle_to_add))
 			left_mean_obj_dist = left_mean_obj_dist + left_laser_data[k]
 			if k< lenght_left_list - 1  : 
