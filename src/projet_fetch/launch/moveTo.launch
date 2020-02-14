@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+	
+	<!--Placement du laser par rapport a la frame du robot--> 
+	<node pkg="tf" type="static_transform_publisher" name="add_laser_to_baselink" args="0.13 0 0.13 0 0 0 base_link laser 100"/>
+	
+	<!--Recuperation de la carte (de la premiere salle) dans laquelle on veut donner des points de deplacement objectifs --> 
+	<!--<include file="$(find turtlebot_navigation)/launch/amcl_demo.launch"> 
+		<arg name="map_file" value="/home/bot/catkin_ws/src/fetch/map/salle1.yaml"/>
+	</include>-->
+	<node pkg="map_server" type="map_server" name="map_server" args="/home/bot/catkin_ws/src/fetch/map/salle1.yaml" />
+	<node pkg="amcl" type="amcl" name="amcl" args="scan:=base_scan"/>
+
+	<!--Ouverture de rviz avec les bons parametres --> 
+	<!--<node pkg="rviz" name="rviz" type="rviz" args="-d $(find fetch)/rviz/mapping_init.rviz" />-->
+	<node pkg="rviz" name="rviz" type="rviz" args="-d $(find fetch)/rviz/move_in_map.rviz" />
+	<!-- Navigation parameter files -->
+	<arg name="use_keepout" default="false" />
+
+	<include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
+	<!--<include file="$(find fetch_navigation)/launch/include/move_base.launch.xml" >
+		<arg name="name" value="fetch" />
+		<arg if="$(arg use_keepout)" name="map_topic" value="map_keepout" />
+	</include>-->
+	<node pkg="fetch_navigation" type="tilt_head.py" name="tilt_head_node" />
+</launch>
+
