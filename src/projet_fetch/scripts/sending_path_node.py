@@ -2,18 +2,30 @@
 import rospy
 from heapq import *
 from math import sqrt
-from geometry_msgs.msg import Pose 
+from geometry_msgs.msg import PoseArray, Pose 
 from projet_fetch.msg import path 
 
 # Initialize ROS::node
 rospy.init_node('Coordinate', anonymous=True)
 
+# Initialize node parrameters (parrameter name, default value)
+def node_parameter(name, default):
+    value= default
+    try:
+        value= rospy.get_param('~' + name)
+    except KeyError:
+        value= default
+    return value
+
+_cmd_odom_id= node_parameter('cmd_odom_id', 'odom')
+
 #Definition du dictionnaire comprenant les coordonnees des points et leurs points adjacents
 Coord_et_adjacence = {
-	"0" : [[1,0],[1]],
-	"1" : [[2,0],[0,2]],
-	"2" : [[3,0],[1,3]],
-	"3" : [[4,0],[2]]	
+	"0" : [[0.2,0.2],[1,3]],
+	"1" : [[1,0.5],[0,4]],
+	"2" : [[1,0],[4]],
+	"3" : [[1,1],[0,4]],
+	"4" : [[2,0],[1,2,3]]	
 } 
 
 posx =0
@@ -23,7 +35,6 @@ graph = {}
 def robot_pos(data) : 
 	global posx
 	global posy
-	print("ROBOT POS RECEIVED")
 	posx = data.position.x
 	posy = data.position.y
 
@@ -32,23 +43,40 @@ def Graph_manager(data) :
 	global posy
 	global graph	
 	print("DESKTOP NUMBER RECEIVED" )
-	path_to_pub = path()
+	#Initialize the path 
+	path_to_pub = PoseArray()
+	path_to_pub.poses = []
+	path_to_pub.header.frame_id = _cmd_odom_id 
+	
+	#Get the desktop Pose Number 
 	aim_desktop = int(data.position.x)
+
+	#Creation du graph en donnant la position initiale du robot
 	graph, n = Graph_creation(Coord_et_adjacence, posx, posy)
 	print(graph)
+
 	# Recuperation du path sous forme de liste avec le numero des points par lesquels passer
 	paths = dijkstra(str(n), str(aim_desktop) , voisins)[1]
-	# Creation de la liste qui contiendra les coordonnees des points du path
+	
+	# Creation de la liste qui contiendra les coordonnees des points du path et non leur numero uniquement
 	coord_path = []
 	for k in range(1,len(paths)) : 
 		coord_path.append(Coord_et_adjacence[paths[k]][0])
-	path_to_pub.path= coord_path
-
-	print(path_to_pub.path)
+	print(coord_path)
+	# Remplissage du tableau de Pose a partir de la liste precedente
+	for k in range (len(coord_path)) :
+		one_pos = Pose()
+		one_pos.position.x = coord_path[k][0]
+		one_pos.position.y = coord_path[k][1]
+		path_to_pub.poses.append(one_pos)
+		print(path_to_pub.poses[k])
+	#Envoie de la liste des Pose a rejoindre
 	path_pub.publish(path_to_pub)	
 	
 def Graph_creation(Coord, posx, posy):
 	Graph_list = []
+	min_list = 0 
+	list_dist_origin = []
 	n = len(Coord)
 	for k in range (n+1):
 		Graph_list.append( ("{}".format(k),[]) )
@@ -62,7 +90,17 @@ def Graph_creation(Coord, posx, posy):
 			Graph_list[i][1].append(    ( sqrt((Coord[str(i)][0][0]-Coord[point_to_compare][0][0])**2 + (Coord[point_to_compare][0][1]-Coord[str(j)][0][1])**2),str(point_to_compare) )          )
 	#Ajout des distance entre le robot et les differents autres points
 	for i in range(n) :
-		Graph_list[n][1].append(    ( sqrt((Coord[str(i)][0][0]-posx)**2 + (Coord[point_to_compare][0][1]-posy)),str(i)  )      )
+		list_dist_origin.append(     sqrt((Coord[str(i)][0][0]-posx)**2 + (Coord[point_to_compare][0][1]-posy))   )
+	min_list = list_dist_origin[0]
+	min_list_pos = 0
+	#Recuperation du point le plus proche du robot 
+	for j in range(len(list_dist_origin)-1) :
+		if min_list > list_dist_origin[j+1] : 
+			min_list = list_dist_origin[j+1]
+			min_list_pos = j+1
+
+	
+	Graph_list[n][1].append(    ( sqrt((Coord[str(min_list_pos)][0][0]-posx)**2 + (Coord[str(min_list_pos)][0][1]-posy)),str(min_list_pos)  )      )
 			
 	return(dict(Graph_list), n)
 
@@ -122,7 +160,7 @@ if __name__ == '__main__':
 	rospy.Subscriber('/aim_desktop', Pose, Graph_manager)
 
 	#Publisher for different pose to reach with the robot 
-	path_pub = rospy.Publisher('/path', path, queue_size= 1)
+	path_pub = rospy.Publisher('/path', PoseArray, queue_size= 1)
 	
 	# spin() simply keeps python from exiting until this node is stopped
 	rospy.spin()

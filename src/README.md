@@ -23,9 +23,9 @@ Configuration de la connexion au fetch :
 *export ROS_MASTER_URI=http://freight100.local:11311*  
 *export ROS_IP=<my_address_ip>*  
 
-- Ouvrir ensuite le fichier hosts : 
+- Ouvrir ensuite le fichier hosts :  
 *sudo nano /etc/hosts*  
-Ajouter l'invité correspondant au robot via la ligne suivante :   
+Ajouter l'invité correspondant au robot :   
 *10.1.16.68	freight100*  
 
 Package ROS :
@@ -37,10 +37,11 @@ Les différentes nodes du package "Projet_fetch" :
 Les nodes sont placées dans le dossier scripts du package.  
 
 **Node : Sending_path_node.py :**   
+
 Cette node permet la determination du chemin le plus court pour que le robot puisse se déplacer d'un point A vers un point B.  
 - La configuration des points par lesquels le robot peut/doit passer se fait directement en brut dans le fichier .py.  
 - Ensuite, cette node écoute la position du robot en permanance via le topic */robot_pose*.  
 - Elle écoute attend aussi qu'on lui envoie le numéro du bureau que l'on veut rejoindre via le topic */aim_desktop*  
-- Enfin, elle publie sur le topic */path* et envoie un message de type *path* qui correspond à une liste de liste de coordonnées des points par lesquels le robot doit passer.  
+- Enfin, elle publie sur le topic */path* et envoie un message de type *PoseArray* qui correspond à une liste de liste de *Pose* correspondants aux points par lesquels le robot doit passer.  
 
 
