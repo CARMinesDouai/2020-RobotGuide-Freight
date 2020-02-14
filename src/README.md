@@ -36,12 +36,28 @@ Les différentes nodes du package "Projet_fetch" :
 = 
 Les nodes sont placées dans le dossier scripts du package.  
 
+**Node : aim_and_pose_pub.py :**  
+
+Cette node permet la publication d'un bureau objectif via le topic */aim_desktop* sous forme d'une *Pose*, il faut cependant revoir le message publié car il ne s'agit que d'un entier.  
+Elle permet aussi de publier la position du robot *base_footprint* dans la base fixe */odom*. Cette position est de type *Pose* et est publiée via le topic */robot_pose*.  
+
 **Node : Sending_path_node.py :**   
 
 Cette node permet la determination du chemin le plus court pour que le robot puisse se déplacer d'un point A vers un point B.  
+Description de son fonctionnement :  
 - La configuration des points par lesquels le robot peut/doit passer se fait directement en brut dans le fichier .py.  
 - Ensuite, cette node écoute la position du robot en permanance via le topic */robot_pose*.  
-- Elle écoute attend aussi qu'on lui envoie le numéro du bureau que l'on veut rejoindre via le topic */aim_desktop*  
+- Elle écoute attend qu'on lui envoie le numéro du bureau que l'on veut rejoindre via le topic */aim_desktop*  
 - Enfin, elle publie sur le topic */path* et envoie un message de type *PoseArray* qui correspond à une liste de liste de *Pose* correspondants aux points par lesquels le robot doit passer.  
+
+**Node : move_to.py**
+
+Cette node permet le déplacement du robot d'un point A vers un point B.  
+Description de son fonctionnement : 
+- La node souscrit au topic "/path" dans l'attente de points objectifs à atteindre. Elle reçoit les points objectifs sous la forme de *PoseArray*.  
+- Elle publie dans le topic "cmd_vel" pour envoyer des commandes de vitesse au robot.  
+- La vitesse s'adapte en fonction de la distance au point.  
+- La rotation est effectuée dans un premier temps quand un point du path à été atteint et qu'il faut en rejoindre un autre. 
+
 
 
