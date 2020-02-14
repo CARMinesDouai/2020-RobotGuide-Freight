@@ -5,6 +5,7 @@
 from imutils.video import VideoStream
 from imutils.video import FPS
 from geometry_msgs.msg import Twist
+from sensor_msgs.msg import LaserScan
 import numpy as np
 import argparse
 import imutils
@@ -17,27 +18,10 @@ endX=0
 endY=0
 max_size_X=0
 max_size_Y=0
-
-
-rospy.init_node('person_tracking', anonymous=True)
-_cmd_pub = rospy.Publisher('/cmd_vel_mux/input/navi', Twist, queue_size=1)
-
-def move_robot():
-	global vel_msg
-	global startX
-	global startY
-	global endX
-	global endY
-	vel_msg=Twist()
-	vel_msg.angular.z=-((startX/78)-1)/2
-	print("startX="+str(startX))
-	print("vel_msg_angular="+str(vel_msg.angular.z))
-	vel_msg.linear.x=((startY/14)-1)/20
-	print("startY="+str(startY))
-	print("vel_msg_linear="+str(vel_msg.linear.x))
-	if vel_msg.linear.x>0.5:
-		vel_msg.linear.x=0.5
-	_cmd_pub.publish(vel_msg)
+mean_dist_right=0
+mean_dist_left=0
+last_startX=0
+last_endX=0
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -65,15 +49,63 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 # and initialize the FPS counter
 print("[INFO] starting video stream...")
 vs = VideoStream(src=3).start()
-#vs=cv2.VideoCapture(3)
 time.sleep(2.0)
-
 fps = FPS().start()
 
-# loop over the frames from the video stream
-while True:
-	startX
-	startY
+def move_robot(mean_dist_left,mean_dist_right,a):
+	global vel_msg
+	global startX
+	global startY
+	global endX
+	global endY
+	global last_endX
+	global last_startX
+	vel_msg=Twist()
+	if a==0:
+		vel_msg.angular.z=-(((startX+endX)/400)-1)*1.2	
+	elif a==1:
+		vel_msg.angular.z=0.3
+	else:
+		vel_msg.angular.z=-0.3		
+	if (mean_dist_right>0.01 and mean_dist_right<0.16):
+		vel_msg.angular.z=0
+	if (mean_dist_left>0.01 and mean_dist_left<0.16):
+		vel_msg.angular.z=0	
+	if a==0:
+		vel_msg.linear.x=((startY/8)-1)/30
+	else:
+		vel_msg.linear.x=0.1	
+	if vel_msg.linear.x>0.5:
+		vel_msg.linear.x=0.5
+	_cmd_pub.publish(vel_msg)
+	if startX!=0 and endX!=0:
+		last_endX=endX
+		last_startX=startX
+	print("last_endx"+str(last_endX))
+	print("last_endx"+str(last_startX))
+	return last_endX,last_startX
+def laser_detection(data):
+	Lengths = len(data.ranges)
+	total_range_left=0.0
+	total_range_right=0.0
+	global mean_dist_right
+	global mean_dist_left
+	for i in range(0,242):
+		if data.ranges[i]<0.5:
+			total_range_right+=data.ranges[i]
+	for i in range(484,726):
+		if data.ranges[i]<0.5:
+			total_range_left+=data.ranges[i]
+	mean_dist_left=total_range_left/242
+	mean_dist_right=total_range_right/242
+	return mean_dist_left,mean_dist_right
+
+
+def person_recognition():
+	global startX
+	global startY
+	global endX
+	global endY
 	# grab the frame from the threaded video stream and resize it
 	# to have a maximum width of 400 pixels
 	frame = vs.read()
@@ -101,9 +133,9 @@ while True:
 			# `detections`, then compute the (x, y)-coordinates of
 			# the bounding box for the object
 			idx = int(detections[0, 0, i, 1])
+			#idx15 is the index of the person
 			if idx==15:
-				#print("idx="+str(idx))
-				move_robot()
+				move_robot(mean_dist_left,mean_dist_right,0)
 				box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 				(startX, startY, endX, endY) = box.astype("int")
 				# draw the prediction on the frame
@@ -114,25 +146,28 @@ while True:
 				y = startY - 15 if startY - 15 > 15 else startY + 15
 				cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
-				
+			elif last_endX<200:
+				move_robot(mean_dist_left,mean_dist_right,1)
+			elif last_startX>200:
+				move_robot(mean_dist_left,mean_dist_right,2)
+			
 
 
 	# show the output frame
 	cv2.imshow("Frame", frame)
-	key = cv2.waitKey(1) & 0xFF
 
-	# if the `q` key was pressed, break from the loop
-	if key == ord("q"):
-		break
 
 	# update the FPS counter
 	fps.update()
-
-# stop the timer and display FPS information
-fps.stop()
-print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
-print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
-
-# do a bit of cleanup
-cv2.destroyAllWindows()
-vs.stop()
+	
+if __name__ == '__main__':
+	rospy.init_node('person_tracking', anonymous=True)
+	_cmd_pub = rospy.Publisher('/cmd_vel_mux/input/navi', Twist, queue_size=1)
+	rospy.Subscriber('/scan', LaserScan, laser_detection)
+	while True:
+		person_recognition()
+		key = cv2.waitKey(1) & 0xFF
+		if key == ord("q"):
+			fps.stop()
+			cv2.destroyAllWindows()
+			vs.stop()
