@@ -3,7 +3,7 @@ import rospy
 from heapq import *
 from math import sqrt
 from geometry_msgs.msg import Pose 
-from simple_controller.msg import path 
+from projet_fetch.msg import path 
 
 # Initialize ROS::node
 rospy.init_node('Coordinate', anonymous=True)
