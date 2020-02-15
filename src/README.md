@@ -57,7 +57,21 @@ Description de son fonctionnement :
 - La node souscrit au topic "/path" dans l'attente de points objectifs à atteindre. Elle reçoit les points objectifs sous la forme de *PoseArray*.  
 - Elle publie dans le topic "cmd_vel" pour envoyer des commandes de vitesse au robot.  
 - La vitesse s'adapte en fonction de la distance au point.  
-- La rotation est effectuée dans un premier temps quand un point du path à été atteint et qu'il faut en rejoindre un autre. 
+- La rotation est effectuée dans un premier temps quand un point du path à été atteint et qu'il faut en rejoindre un autre.
+
+**Node : person_tracking.py**
+
+Cette node permet le suivi d'une personne par le robot à l'aide du retour de la caméra et des données laser:
+-la caméra permet la détection d'une personne
+-la détection de personne se base sur un programme de deep learning
+-le laser permet le contournement d'objet se trouvant sur le passage entre la personne à suivre et le robot
+-Cette node publie sur le topic "cmd_vel" et souscrit au topic "/base_scan"
+
+**Node : person_following.py**
+
+Cette node permet la reconnaissance faciale de la personne qui suit le robot:
+	-Elle renvoie un message ROS constitué de 2 variables (1 bool et 1 int) donnant la présence ou non d'une personne et la distance à laquelle se trouve la personne
+	-La reconnaissance faciale est basée sur du deep learning, des modéles pre-entrainés provenant de la bibliothéque dlib sont utilisés afin de reconnaitre les visages des personnes selon la forme de 		leur visage.
 
 
 
