@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="person_following" type="easy_facial_recognition.py" name="person_following" args="--i known_faces">
+	</node>
+</launch>
