@@ -59,16 +59,15 @@ def angle_avoidance_function():
 	Dmax = 0.5
 	Dcenter = 1
 	Dmin = 0.1
-	#Recuperation des donnees laser utiles 
+	#Recuperation des donnees laser utiles sous forme de liste
 	Lengths = len(laser_list.ranges)
 	left_laser_data = []
 	right_laser_data= []
-	center_laser_data = laser_list.ranges[Lengths/2]
 	number_of_data_to_get = 192
-	#Moyenne des distance gauche droite
+	#Moyenne des distance gauche droite qui sert dans le cas ou un objet est en face, le robot choisi alors le cote le plus ouvert
 	left_mean_obj_dist = 0 
 	right_mean_obj_dist = 0 
-	#Minimum de proximite a gauche et a droite
+	#Minimum de proximite a gauche et a droite qui va servir pour ajuster la vitesse du robot
 	left_min_dist = -1
 	right_min_dist = -1
 	#On prend les donnees laser a partir de 1/8 jusqu'au centre et du centre jusqu a 7/8
@@ -78,7 +77,6 @@ def angle_avoidance_function():
 		left_laser_data.append(laser_list.ranges[Lengths*k/number_of_data_to_get])
 	#last_left_laser_data = laser_list.ranges[Lengths*90/number_of_data_to_get]
 	print("Last left laser data : " + str(laser_list.ranges[Lengths-1]))
-	print(str(center_laser_data))
 
 	lenght_left_list = len(left_laser_data)
 	print (lenght_left_list)

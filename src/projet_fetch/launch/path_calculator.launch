@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- Connection au robot --> 
+	<include file="$(find turtlebot_bringup)/launch/minimal.launch" />
+	
+	<!--Activation du noeud correspondant aux donnees laser -->
+	<node pkg="urg_node" type="urg_node" name="urg_node" />
+	
+	<!--Placement du laser par rapport a la frame du robot--> 
+	<node pkg="tf" type="static_transform_publisher" name="add_laser_to_baselink" args="0.13 0 0.13 0 0 0 base_link laser 100"/>
+
+	  <!-- Map server -->
+	  <!--<arg name="map_file" default="$(env TURTLEBOT_MAP_FILE)"/> -->
+	  <arg name="map_file" default="/home/bot/catkin_ws/src/map/map_finale.yaml"/>
+	  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+	  <!-- AMCL -->
+	  <include file="$(find projet_fetch)/launch/includes/amcl/r200_amcl.launch.xml">
+	    <arg name="initial_pose_x" value="0.0"/>
+	    <arg name="initial_pose_y" value="0.0"/>
+	    <arg name="initial_pose_a" value="0.0"/>
+	  </include>
+	
+	  <include file="$(find projet_fetch)/launch/includes/move_base.launch.xml"/> 
+
+ 
+  	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find projet_fetch)/rviz/navigation.rviz"/>
+
+</launch>
+

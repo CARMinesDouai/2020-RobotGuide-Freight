@@ -1,0 +1,40 @@
+Compte rendu du 17/02/20 - 10h : 
+
+Présentation du travail effectué dans la semaine :
+
+- Brique de déplacement du robot :
+	*Node Evitement d'obstacle ok 
+	*Node Calcul du path et envoi de celui-ci à move_to ok
+	*Node Node d'envoi du bureau objectif ok 
+	
+- Brique de vision : 
+	*Reconnaissance faciale : Algorithme fonctionnel mais rafraichissement peut être un peu lent -> Reste un pb
+	*Reconnaissance de personne : Algorithme fonctionnel avec envoie des données de présence sur un topic
+	*Tracking de la personne : Longe les obstacles si besoin lors des virages et recherche de la personne lors de la perte de visu sur celle-ci
+
+Remarques sur le travail et objectifs à venir : 
+
+- Brique de déplacement du robot : 
+	*Envoi des corrections de trajectoire via un topic et non via les rosparam pour la correction de trajectoire -> Modif à faire
+	*Brique d'évitement ok 
+	*Brique move_to ok 
+	*Brique d'envoie du path à revoir. L'idée de création des points manuellement pose problème dans l'adaptabilité du processus.
+	-> Récupèration automatisée via la map créée et positionnement des bureaux manuelle. 
+
+- Brique de vision : 
+	*Neural stick à regarder afin de trouver un algo plus efficace de reco faciale
+	*Camera à adapter sur le robulab et motorisation de la camera si possible
+	*Utiliser la profondeur de la caméra pour connaitre la distance de la personne que le robot suit (Plutôt que l'utilisation du cadre créé lors de la reconnaissance)
+
+
+- Conception : 
+	*Objectifs revus : Plus de conception à prévoir sur le robot fetch
+	*Peut-être de légères modifications pour adaptation sur le robulab
+
+- IHM :
+	*Objectif à voir dans les deux dernières semaines : Récupèration de l'interface javascript avec ROS 
+
+- Creation de la map : 
+	*Création de la carte pas nécéssaire car une carte a déjà été faite.
+
+Prochaine réunion lundi 02/03 9h30 ? 
