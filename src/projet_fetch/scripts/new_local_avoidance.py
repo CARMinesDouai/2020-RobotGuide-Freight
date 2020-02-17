@@ -17,7 +17,6 @@ laser_list = []
 angle_to_add = 0
 rospy.set_param("cmd_vel_init", [0.1,0.3])
 rospy.set_param("cmd_vel_correction", [1,1])
-#rospy.set_param("cmd_vel_to_add", [0,0])
 
 
 
@@ -42,7 +41,7 @@ def angle_to_add_function():
 	rospy.set_param("angle_to_add", angle_to_add)
 	#print("Angle to add : " + str(angle_to_add) )
 
-
+#Get laser data
 def laser_data(msg):
 	global laser_list
 	laser_list = msg
@@ -141,7 +140,7 @@ def angle_avoidance_function():
 	print("Angle to add : " + str(angle_to_add) )
 	ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin)
 			
-	
+#Reorientation progressive vers le point objectif
 def angle_decrementation():
 	global angle_to_add
 	if angle_to_add > 100 : 
@@ -184,14 +183,10 @@ def ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin):
 	rospy.set_param("cmd_vel_correction", [linear,angular])
 
 if __name__ == '__main__':
-	print("Start move.py")	
+	print("Start get scan.py")	
 
 	# Get laser data
 	rospy.Subscriber('/scan', LaserScan, laser_data)
-
-	#rospy.Subscriber("/tf", TFMessage, get_pose_frame_in_odom)
-
-	#rospy.Subscriber("/mobile_base/sensors/imu_data", Imu, angle_to_add_function)
 	
 	# spin() simply keeps python from exiting until this node is stopped
 	rospy.spin()

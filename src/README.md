@@ -13,7 +13,10 @@ Cet objectif décompose le projet en différentes grandes parties :
 
 Répartission du travail : 
 ==
-Au cours de ce projet, nous souhaitons avoir une vision sur les parties que nous traitons l'un l'autre. Nous allons donc nous informer des différentes avancées au fil de celui-ci.
+Au cours de ce projet, nous souhaitons avoir une certaine vision sur les parties que nous traitons l'un l'autre. Nous allons donc nous informer des différentes avancées tout au long de celui-ci.  
+Pour le moment :  
+Thibaut Desfachelles : Partie vision - Suivi et tracking  
+Arthur JOSI : Partie déplacement 
 
 Configuration de la connexion au fetch :
 ==
@@ -58,6 +61,30 @@ Description de son fonctionnement :
 - Elle publie dans le topic "cmd_vel" pour envoyer des commandes de vitesse au robot.  
 - La vitesse s'adapte en fonction de la distance au point.  
 - La rotation est effectuée dans un premier temps quand un point du path à été atteint et qu'il faut en rejoindre un autre. 
+- Rosparam pour la vitesse angulaire et lineaire. 
+
+**Node : local_avoidance.py**
+
+Cette node récupère les données laser et corrige la trajectoire du robot dans le cas où des objets seraient placés sur sa trajectoire. 
+Description de son fonctionnement : 
+- Récupération des données laser via le topic */scan* sous forme de message *LaserScan*. 
+- 
+
+**Node : person_tracking.py**
+
+Cette node permet le suivi d'une personne par le robot à l'aide du retour de la caméra et des données laser:  
+
+- la caméra permet la détection d'une personne.  
+- la détection de personne se base sur un programme de deep learning.  
+- le laser permet le contournement d'objet se trouvant sur le passage entre la personne à suivre et le robot.  
+- Cette node publie sur le topic "cmd_vel" et souscrit au topic "/base_scan".  
+
+**Node : person_following.py**
+
+Cette node permet la reconnaissance faciale de la personne qui suit le robot:  
+
+- Elle renvoie un message ROS constitué de 2 variables (1 bool et 1 int) donnant la présence ou non d'une personne et la distance à laquelle se trouve la personne.  
+- La reconnaissance faciale est basée sur du deep learning, des modéles pre-entrainés provenant de la bibliothéque dlib sont utilisés afin de reconnaitre les visages des personnes selon la forme de leur visage.  
 
 
 
