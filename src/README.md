@@ -86,5 +86,5 @@ Cette node permet la reconnaissance faciale de la personne qui suit le robot:
 - Elle renvoie un message ROS constitué de 2 variables (1 bool et 1 int) donnant la présence ou non d'une personne et la distance à laquelle se trouve la personne.  
 - La reconnaissance faciale est basée sur du deep learning, des modéles pre-entrainés provenant de la bibliothéque dlib sont utilisés afin de reconnaitre les visages des personnes selon la forme de leur visage.  
 
-
-
+![rqt_gaph]
+(https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)
