@@ -90,7 +90,7 @@ Cette node permet la reconnaissance faciale de la personne qui suit le robot:
 Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
 
 ![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)
-*Explication*  
+*Explications :*  
 La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
   1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
   2 - Ajouter un bureau à la liste des bureaux disponibles.   
