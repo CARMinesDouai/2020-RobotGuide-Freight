@@ -6,15 +6,29 @@ import PIL.Image
 import numpy as np
 from std_msgs.msg import Bool
 from imutils import face_utils
+import imutils
 import argparse
 from pathlib import Path
 import os
 import ntpath
 import rospy
+import pyrealsense2 as rs
+import numpy as np
+from person_following.msg import person_presence
 
-person_presence=False
+top=0
+left=0
+right=0
+bottom=0
+dist_total_average=0
+person_pres=person_presence()
+person_pres.Distance=0
+person_pres.Presence=False
+
+
 parser = argparse.ArgumentParser(description='Easy Facial Recognition App')
 parser.add_argument('-i', '--input', type=str, required=True, help='directory of input known faces')
+
 
 print('[INFO] Starting System...')
 print('[INFO] Importing pretrained model..')
@@ -34,11 +48,10 @@ def transform(image, face_locations):
         coord_faces.append(coord_face)
     return coord_faces
 
-
 def encode_face(image):
     face_locations = face_detector(image, 1)
     face_encodings_list = []
-    landmarks_list = []
+    landmarks_list=[]
     for face_location in face_locations:
         # DETECT FACES
         shape = pose_predictor_5_point(image, face_location)
@@ -51,8 +64,12 @@ def encode_face(image):
 
 
 def easy_face_reco(frame, known_face_encodings, known_face_names):
-    global person_presence
-    person_presence=Bool()
+    global top
+    global bottom
+    global right
+    global left
+    global person_pres
+    global dist_total_average
     rgb_small_frame = frame[:, :, ::-1]
     # ENCODING FACE
     face_encodings_list, face_locations_list, landmarks_list = encode_face(rgb_small_frame)
@@ -73,27 +90,65 @@ def easy_face_reco(frame, known_face_encodings, known_face_names):
             first_match_index = result.index(True)
             name = known_face_names[first_match_index]
             face_recon = True
-            person_presence=True
+            person_pres.Presence=True
         else:
-            person_presence=False
+            person_pres.Presence=False
             name = "Unknown"
             face_names.append(name)
 
     for (top, right, bottom, left), name in zip(face_locations_list, face_names):
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
+        cv2.rectangle(frame, (left+50, top+50), (right-50, bottom-50), (0, 255, 0), 2)
         cv2.rectangle(frame, (left, bottom - 30), (right, bottom), (0, 255, 0), cv2.FILLED)
         cv2.putText(frame, name, (left + 2, bottom - 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
 
-    for shape in landmarks_list:
+    dist_line=0
+"""   for shape in landmarks_list:
         for (x, y) in shape:
             cv2.circle(frame, (x, y), 1, (255, 0, 255), -1)
+            dist_line+=depth_frame.get_distance(x,y)
+            print("dist_line="+str(depth_frame.get_distance(x,y)))
+    dist_total_average=dist_line/68"""
 
+def distance_person(depth_frame):
+	global left
+	global right  
+	global top
+	global bottom
+	global person_pres
+	dist_total_average=0
+	dist_total=0
+	top=top+50
+	bottom=bottom-50
+	left=left+50
+	right=right-50
+        #if top>0 and bottom<480 and left>0 and right!=0 and right<640 and bottom!=0:
+	for height in range (top,bottom):
+                divided=0
+                dist_line=0
+                for width in range(left,right):
+                        if depth_frame.get_distance(width,height)>0 and depth_frame.get_distance(width,height)<1:                               
+                                dist_line+=depth_frame.get_distance(width,height) 
+                                print("get_distance="+str(depth_frame.get_distance(width,height)))
+                                print("dist_line="+str(dist_line))
+                                divided+=1
+                print("divided="+str(divided))
+                if divided!=0:
+                        dist_total+=dist_line/(divided)
+                        print("average_dist_line="+str(dist_line/divided))
+                        print("dist_total="+str(dist_total))
+                
+	dist_total_average=(dist_total/(bottom-top))
+        #person_pres.Distance=dist_total_average
+	print("dist_total_average="+str(dist_total_average))
+	print("fin calcul")
+	return dist_total_average
+
+	
 
 if __name__ == '__main__':
     rospy.init_node("facial_recognition",anonymous=True)
-    rospy.Publisher("/person_following",Bool,queue_size=1)
     args = parser.parse_args()
-
+    _cmd_pub=rospy.Publisher("/person_following",person_presence,queue_size=1)
     print('[INFO] Importing faces...')
     face_to_encode_path = Path(args.input)
     files = [file_ for file_ in face_to_encode_path.rglob('*.jpg')]
@@ -113,15 +168,30 @@ if __name__ == '__main__':
 
     print('[INFO] Faces well imported')
     print('[INFO] Starting Webcam...')
-    video_capture = cv2.VideoCapture(0)
+    #video_capture = cv2.VideoCapture(3)
+    pipeline = rs.pipeline()
+    pipeline.start()
     print('[INFO] Webcam well started')
     print('[INFO] Detecting...')
     while True:
-        ret, frame = video_capture.read()
-        easy_face_reco(frame, known_face_encodings, known_face_names)
-        cv2.imshow('Easy Facial Recognition App', frame)
+        # Wait for a coherent pair of frames: depth and color
+        frames = pipeline.wait_for_frames()
+        depth_frame = frames.get_depth_frame().as_depth_frame()
+        color_frame = frames.get_color_frame()
+        color_image = np.asanyarray(color_frame.get_data())
+        """gray = cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY)
+        gray = cv2.GaussianBlur(gray, (5, 5), 0)
+        edged = cv2.Canny(gray, 35, 125)
+        # find the contours in the edged image and keep the largest one;
+        # we'll assume that this is our piece of paper in the image
+        cv2.imshow('frame',edged)"""
+        easy_face_reco(color_image, known_face_encodings, known_face_names)
+        dist_total_average=distance_person(depth_frame)
+        cv2.imshow('Easy Facial Recognition App', color_image)
+        #_cmd_pub.publish(person_pres)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     print('[INFO] Stopping System')
+    pipeline.stop()
     video_capture.release()
-    cv2.destroyAllWindows()
+    cv2.destroyAllWindows() 

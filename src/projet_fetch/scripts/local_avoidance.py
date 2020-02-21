@@ -153,7 +153,7 @@ def angle_avoidance_function():
 def angle_decrementation():
 	global angle_to_add
 	if angle_to_add > 100 : 
-		angle_to_add = angle_to_add - 2.5
+		angle_to_add = angle_to_add - 2.5	
 	elif angle_to_add < -100 : 
 		angle_to_add = angle_to_add + 2.5
 	if angle_to_add > 50 and angle_to_add <= 100 : 
