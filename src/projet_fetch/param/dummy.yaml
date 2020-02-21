@@ -1,1 +1,6 @@
 #A dummy file loaded when no custom param file is given 
+#changer ici les parametres que l'on veut
+global_costmap:
+  inflation_radius: 0.55
+  cost_scaling_factor: 10
+  robot_radius : 0.5

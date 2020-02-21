@@ -10,14 +10,13 @@ from tf2_msgs.msg import TFMessage
 from sensor_msgs.msg import LaserScan
 
 # Initialize ROS::node
-rospy.init_node('move', anonymous=True)
+rospy.init_node('Local_avoidance', anonymous=True)
 
 first_orientation = True
 laser_list = []
 angle_to_add = 0
-rospy.set_param("cmd_vel_init", [0.1,0.3])
+rospy.set_param("cmd_vel_init", [0.2,0.2])
 rospy.set_param("cmd_vel_correction", [1,1])
-#rospy.set_param("cmd_vel_to_add", [0,0])
 
 
 
@@ -42,7 +41,7 @@ def angle_to_add_function():
 	rospy.set_param("angle_to_add", angle_to_add)
 	#print("Angle to add : " + str(angle_to_add) )
 
-
+#Get laser data
 def laser_data(msg):
 	global laser_list
 	laser_list = msg
@@ -59,15 +58,16 @@ def angle_avoidance_function():
 	Dmax = 0.5
 	Dcenter = 1
 	Dmin = 0.1
-	#Recuperation des donnees laser utiles sous forme de liste
+	#Recuperation des donnees laser utiles 
 	Lengths = len(laser_list.ranges)
 	left_laser_data = []
 	right_laser_data= []
+	center_laser_data = laser_list.ranges[Lengths/2]
 	number_of_data_to_get = 192
-	#Moyenne des distance gauche droite qui sert dans le cas ou un objet est en face, le robot choisi alors le cote le plus ouvert
+	#Moyenne des distance gauche droite
 	left_mean_obj_dist = 0 
 	right_mean_obj_dist = 0 
-	#Minimum de proximite a gauche et a droite qui va servir pour ajuster la vitesse du robot
+	#Minimum de proximite a gauche et a droite
 	left_min_dist = -1
 	right_min_dist = -1
 	#On prend les donnees laser a partir de 1/8 jusqu'au centre et du centre jusqu a 7/8
@@ -76,7 +76,8 @@ def angle_avoidance_function():
 	for k in range(number_of_data_to_get-1,number_of_data_to_get/2,-1) : 
 		left_laser_data.append(laser_list.ranges[Lengths*k/number_of_data_to_get])
 	#last_left_laser_data = laser_list.ranges[Lengths*90/number_of_data_to_get]
-	print("Last left laser data : " + str(laser_list.ranges[Lengths-1]))
+	#print("Last left laser data : " + str(laser_list.ranges[Lengths-1]))
+	#print(str(center_laser_data))
 
 	lenght_left_list = len(left_laser_data)
 	print (lenght_left_list)
@@ -126,40 +127,49 @@ def angle_avoidance_function():
 	#Angle de correction a choisir si l'objet est centre : On observe la moyenne des distances
 	if left_angle_to_add != 0 or right_angle_to_add != 0 : 
 		if abs(left_angle_to_add + right_angle_to_add) < 30 and left_angle_to_add != 0 and right_angle_to_add != 0 : 
+		#if abs(left_angle_to_add + right_angle_to_add) < 30 and left_angle_to_add != 0 and right_angle_to_add != 0 : 
 			print("left mean : " + str(left_mean_obj_dist))
 			print("right mean : " + str(right_mean_obj_dist))
-			if right_mean_obj_dist < left_mean_obj_dist :
-				print("Selection du cote de rotation gauche")
-				angle_to_add = right_angle_to_add
-			if right_mean_obj_dist > left_mean_obj_dist :
-				print("Selection du cote de rotation droit")
-				angle_to_add = left_angle_to_add		
+			if left_min_dist > 0.3 and right_min_dist > 0.3 :
+				if right_mean_obj_dist < left_mean_obj_dist :
+					print("Selection du cote de rotation gauche")
+					angle_to_add = right_angle_to_add
+				if right_mean_obj_dist > left_mean_obj_dist :
+					print("Selection du cote de rotation droit")
+					angle_to_add = left_angle_to_add
+			else : 
+				print("left_min_dist : " + str(left_min_dist))
+				print("right_min_dist : " + str(right_min_dist))
+				if left_min_dist < right_min_dist : 
+					angle_to_add = left_angle_to_add
+				else : 
+					angle_to_add = right_angle_to_add
 		else : 
 			angle_to_add = left_angle_to_add + right_angle_to_add
 	print("Angle to add : " + str(angle_to_add) )
 	ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin)
 			
-	
+#Reorientation progressive vers le point objectif
 def angle_decrementation():
 	global angle_to_add
 	if angle_to_add > 100 : 
-		angle_to_add = angle_to_add - 1.5
+		angle_to_add = angle_to_add - 2.5
 	elif angle_to_add < -100 : 
-		angle_to_add = angle_to_add + 1.5
+		angle_to_add = angle_to_add + 2.5
 	if angle_to_add > 50 and angle_to_add <= 100 : 
-		angle_to_add = angle_to_add - 1.0
+		angle_to_add = angle_to_add - 2
 	elif angle_to_add >= -100 and angle_to_add < - 50 : 
-		angle_to_add = angle_to_add + 1.0
+		angle_to_add = angle_to_add + 2
 	if angle_to_add > 0 and angle_to_add <= 50 : 
-		angle_to_add = angle_to_add - 0.5
+		angle_to_add = angle_to_add - 1.5
 	elif angle_to_add >= -50 and angle_to_add < 0 : 
-		angle_to_add = angle_to_add + 0.5
+		angle_to_add = angle_to_add + 1.5
 
 def ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin):
 	global angle_to_add
 	Int_dist = (Dmax-Dmin)/10
-	#vitesse lineaire variant entre *0.2 et *1 
-	Int_linear = (1.0-0.2)/10
+	#vitesse lineaire variant entre *0.1 et *1 
+	Int_linear = (1.0-0.1)/10
 	#vitesse angulaire variant entre *1 et *2 
 	Int_angular = (2.0-1.0)/10
 	test = False 
@@ -174,7 +184,7 @@ def ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin):
 			if right_min_dist > Dmin + Int_dist*(k) and right_min_dist < Dmin + Int_dist*(k+1) and angle_to_add > 0 :
 				test=True
 				angular = (1+Int_angular*(10-k))
-				linear = linear = (0.2 + Int_linear*k)
+				linear = (0.2 + Int_linear*k)
 		if not test : 
 			linear = 1 
 			angular = 1 
@@ -182,14 +192,10 @@ def ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin):
 	rospy.set_param("cmd_vel_correction", [linear,angular])
 
 if __name__ == '__main__':
-	print("Start move.py")	
+	print("Start get scan")	
 
 	# Get laser data
 	rospy.Subscriber('/scan', LaserScan, laser_data)
-
-	#rospy.Subscriber("/tf", TFMessage, get_pose_frame_in_odom)
-
-	#rospy.Subscriber("/mobile_base/sensors/imu_data", Imu, angle_to_add_function)
 	
 	# spin() simply keeps python from exiting until this node is stopped
 	rospy.spin()

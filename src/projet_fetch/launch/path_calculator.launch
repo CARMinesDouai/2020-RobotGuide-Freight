@@ -11,14 +11,15 @@
 
 	  <!-- Map server -->
 	  <!--<arg name="map_file" default="$(env TURTLEBOT_MAP_FILE)"/> -->
-	  <arg name="map_file" default="/home/bot/catkin_ws/src/map/map_finale.yaml"/>
+	  <arg name="map_file" default="/home/bot/catkin_ws/src/projet_fetch/map/Lahure.yaml"/>
 	  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
 	  <!-- AMCL -->
 	  <include file="$(find projet_fetch)/launch/includes/amcl/r200_amcl.launch.xml">
-	    <arg name="initial_pose_x" value="0.0"/>
-	    <arg name="initial_pose_y" value="0.0"/>
-	    <arg name="initial_pose_a" value="0.0"/>
+	    <!-- Configuration de la position initiale du robot --> 
+	    <arg name="initial_pose_x" value="1.0"/>
+	    <arg name="initial_pose_y" value="-1.0"/>
+	    <arg name="initial_pose_a" value="1.5"/>
 	  </include>
 	
 	  <include file="$(find projet_fetch)/launch/includes/move_base.launch.xml"/> 
@@ -26,5 +27,6 @@
  
   	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find projet_fetch)/rviz/navigation.rviz"/>
 
+	<!--<node name="projet_fetch" pkg="projet_fetch" type="move_to.py"  />-->
 </launch>
 

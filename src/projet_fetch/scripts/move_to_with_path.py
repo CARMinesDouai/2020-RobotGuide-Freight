@@ -48,7 +48,7 @@ def getting_path(data):
 		path = True
 		number_of_point_to_reach = len(data.poses)
 		for k in range(number_of_point_to_reach):
-			if k%5 == 0 and k >=5: 
+			if k%1 == 0 and k >=1: 
 				path_pos_in_odom.append([data.poses[k].pose.position.x,data.poses[k].pose.position.y])
 				real_number_of_point_to_reach = real_number_of_point_to_reach + 1
 		print(path_pos_in_odom)
@@ -170,6 +170,8 @@ def move_forward(pt_goal_base_link, vel_msg, orientation_done, dist):
 			reached_point = reached_point + 1 
 			if reached_point == real_number_of_point_to_reach :
 				last_goal_reached = True 
+			else : 
+				vel_msg.linear.x = rospy.get_param("cmd_vel_init")[0]
 			
 			
 		
