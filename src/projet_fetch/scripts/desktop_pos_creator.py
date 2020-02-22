@@ -83,9 +83,9 @@ def suppresion() :
 
 def ask_for_coord(data) : 
 	global desktop_line_to_supress
-	print("DATA RECEIVED for suppression") 
+	#print("DATA RECEIVED for suppression") 
 	coord_line_to_supress = "[{},{}]".format(str(data.pose.position.x),str(data.pose.position.y))
-	print("Coordinate to supress received : " + str(coord_line_to_supress))
+	#print("Coordinate to supress received : " + str(coord_line_to_supress))
 	lines = []
 	with open('/home/bot/catkin_ws/src/projet_fetch/txt/desktop_list.txt', 'r') as f:
 		for l in f.readlines() : 
@@ -96,9 +96,13 @@ def ask_for_coord(data) :
 				lines.append(a)
 		print("coord line to supress : " + str(coord_line_to_supress)) 
 		print("desktop name line to supress : " + str(desktop_line_to_supress))
-		print("List of lines in txt : " + str(lines))
+		for k in range(len(lines)):
+			if k%2 == 0 :
+				print(lines[k])
+		#print("List of lines in txt : " + str(lines))
 	with open('/home/bot/catkin_ws/src/projet_fetch/txt/desktop_list.txt', 'w') as f:
 		f.write("\r\n".join(lines))
+	print("Give the name of another desktop to remove : " )
 
 
 if __name__ == '__main__':

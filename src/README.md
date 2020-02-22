@@ -1,6 +1,6 @@
-**Projet : FetchRobot**  
+### Projet : Robot d'acceuil 
 
-**Developpeurs : Arthur Josi - Thibaut Desfachelles**  
+### Developpeurs : Arthur Josi - Thibaut Desfachelles 
 
 Description du projet :
 ==

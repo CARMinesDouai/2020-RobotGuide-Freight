@@ -13,6 +13,7 @@
 		<param name="maxURange" value="4.0"/>
 		<param name="map_update_interval" value="5.0"/>
 	</node>
+
 	<!--Ouverture de rviz avec les parametres pre-etablis pour la creation de la map-->
 	<node pkg="rviz" name="rviz" type="rviz" args="-d $(find fetch)/rviz/mapping_init.rviz" />
 </launch>

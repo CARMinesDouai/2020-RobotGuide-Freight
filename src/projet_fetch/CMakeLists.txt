@@ -52,6 +52,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    path.msg
    desktop_name.msg
+   desktop_name_list.msg
 #   Message2.msg
  )
 
