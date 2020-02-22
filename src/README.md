@@ -89,23 +89,23 @@ Cette node permet la reconnaissance faciale de la personne qui suit le robot:
 Les différents launch files du package "Projet_fetch" :  
 = 
 
-#### Mapping à partir du robot turtlebot
+## Mapping à partir du robot turtlebot
 
-#### Déplacement du robot 
+## Déplacement du robot 
 
-### Déplacement non réactif (sans évitement d'objets locaux non présent dans la map) 
+#### Déplacement non réactif (sans évitement d'objets locaux non présent dans la map) 
 
-### Déplacement réactif 
+#### Déplacement réactif 
 
-#### Déplacement du robot depuis une interface web
+## Déplacement du robot depuis une interface web
 
-#### La gestion de bureaux objectifs 
+## La gestion de bureaux objectifs 
   
 Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
 
 ![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)
 
-# Explications :
+#### Explications :
 
 La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
   1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
