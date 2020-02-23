@@ -21,7 +21,7 @@ def get_desktop_goal() :
 			desktop_name.desktop_list.append(line.strip())
 			#desktop_to_reach_coord_pub.publish(desktop)
 	desktop_name_pub.publish(desktop_name)
-	print(desktop_name)
+	#print(desktop_name)
 		
 			
 if __name__ == '__main__':
