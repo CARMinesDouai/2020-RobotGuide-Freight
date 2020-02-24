@@ -4,7 +4,7 @@
 
 Description du projet :
 ==
-L'objectif de ce projet est de travailler avec un robot fetch et d'en faire un robot d'acceuil.  
+L'objectif de ce projet est de travailler avec un robot et d'en faire un robot d'acceuil.  
 Cet objectif décompose le projet en différentes grandes parties :  
 - La brique de déplacement réactive du robot permettant d'aller d'un bureau à un autre  
 - La brique de vision du robot permettant de s'assurer le suivi de la personne interessée ou de suivre cette personne dans le bâtiment.  
@@ -16,27 +16,96 @@ Répartission du travail :
 Au cours de ce projet, nous souhaitons avoir une certaine vision sur les parties que nous traitons l'un l'autre. Nous allons donc nous informer des différentes avancées tout au long de celui-ci.  
 Pour le moment :  
 Thibaut Desfachelles : Partie vision - Suivi et tracking  
-Arthur JOSI : Partie déplacement 
+Arthur JOSI : Partie déplacement - Partie web 
 
-Configuration de la connexion au fetch :
+Configuration de l'envronnement :
 ==
+
+####Prérequis d'utilisation
+Il est nécéssaire d'être sous kinetic pour le bon fonctionnement des parties à suivre.  
+Le tutoriel Turtlebot Bringup doit avoir été complété.   
+**Configuration du bashrc :**  
+Ouverture du fichier :  
+```cd ~/.bashrc```  
+Ajout de cette ligne en fin de fichier :  
+```source $HOME/catkin_ws/devel/setup.bash```  
+
+**Installing project :**  
+```cd <catkin_repo>/src  
+git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```
+
+
+####A mettre dans les annexes
 - Ouvrir le fichier bashrc :  
     ```cd ~/.bashrc```  
 - Copier les lignes suivantes en fin de fichier :  
-    export ROS_MASTER_URI=http://freight100.local:11311  
-    export ROS_IP=<my_address_ip>  
+    ```export ROS_MASTER_URI=http://freight100.local:11311```  
+    ```export ROS_IP=<my_address_ip>```  
 
 - Ouvrir ensuite le fichier hosts :  
-    sudo nano /etc/hosts  
+    ```sudo nano /etc/hosts```  
 - Ajouter l'invité correspondant au robot :   
-    10.1.16.68	freight100*  
+    ```10.1.16.68	freight100```  
 
 Package ROS :
 ==
 Le package Projet_fetch regroupe tous les fichiers important au bon fonctionnement du robot.
 
-Les différentes nodes du package "Projet_fetch" :  
-= 
+
+Les différents launch files du package "Projet_fetch" :  
+==
+
+### Gestion des bureaux présents dans le bâtiment 
+``` launch ```  
+### Création de la carte du bâtiment à mapper" 
+``` launch ```  
+### Déplacement du robot vers un point objectif depuis RVIZ
+Sans évitement d'obstacles locaux :  
+``` launch ```  
+Avec évitement d'obstacles locaux :  
+``` launch ```  
+### Déplacement du robot vers un point objectif depuis application web 
+Lancement du launch file  :  
+``` launch ```  
+Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :
+```http://<robot ip>:8080```  
+
+Fonctionnement des launch files
+==
+
+## Mapping à partir du robot turtlebot
+
+## Déplacement du robot 
+
+#### Déplacement non réactif (sans évitement d'objets locaux non présent dans la map) 
+
+#### Déplacement réactif 
+
+## Déplacement du robot depuis une interface web
+
+## La gestion de bureaux objectifs 
+  
+Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
+
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)
+
+#### Explications :
+
+La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
+  1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
+  2 - Ajouter un bureau à la liste des bureaux disponibles.   
+  3 - Supprimer un bureau de la liste.  
+  
+**Cas 1 et 2 :**  
+Dans cette configuration, la node attend qu'un point soit publié sur RVIZ. Une fois cela fait, les coordonnées sont enregistré dans un fichier txt si l'utilisateur rentre le nom du bureau associé.   
+
+**Cas 3 :**  
+Dans cette configuration, l'utilisateur envoie le nom du bureau qu'il veut supprimer. Le nom du bureau est envoyé à la node "get_and_send_desktop" qui publie alors les coordonnées coordonnées correspondantes à supprimer.  
+
+
+Description des différentes nodes du package "Projet_fetch" :  
+== 
+ 
 Les nodes sont placées dans le dossier scripts du package.  
 
 **Node : aim_and_pose_pub.py :**  
@@ -85,38 +154,6 @@ Cette node permet la reconnaissance faciale de la personne qui suit le robot:
 
 - Elle renvoie un message ROS constitué de 2 variables (1 bool et 1 int) donnant la présence ou non d'une personne et la distance à laquelle se trouve la personne.  
 - La reconnaissance faciale est basée sur du deep learning, des modéles pre-entrainés provenant de la bibliothéque dlib sont utilisés afin de reconnaitre les visages des personnes selon la forme de leur visage.  
-
-Les différents launch files du package "Projet_fetch" :  
-= 
-
-## Mapping à partir du robot turtlebot
-
-## Déplacement du robot 
-
-#### Déplacement non réactif (sans évitement d'objets locaux non présent dans la map) 
-
-#### Déplacement réactif 
-
-## Déplacement du robot depuis une interface web
-
-## La gestion de bureaux objectifs 
-  
-Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
-
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)
-
-#### Explications :
-
-La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
-  1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
-  2 - Ajouter un bureau à la liste des bureaux disponibles.   
-  3 - Supprimer un bureau de la liste.  
-  
-**Cas 1 et 2 :**  
-Dans cette configuration, la node attend qu'un point soit publié sur RVIZ. Une fois cela fait, les coordonnées sont enregistré dans un fichier txt si l'utilisateur rentre le nom du bureau associé.   
-
-**Cas 3 :**  
-Dans cette configuration, l'utilisateur envoie le nom du bureau qu'il veut supprimer. Le nom du bureau est envoyé à la node "get_and_send_desktop" qui publie alors les coordonnées coordonnées correspondantes à supprimer.  
 
 
 
