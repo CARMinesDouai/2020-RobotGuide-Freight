@@ -67,15 +67,15 @@ La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois 
   3 - Supprimer un bureau de la liste.  
 La gestion se fait pour le moment dans la console, les commandes à entrer sont indiquées (Sauf pour quitter où la commande CTRL + C est necessaire) :
 
-![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/desktop_manager.png)  
+![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_manager.png)  
 
 **Visualisation des bureaux**  
 Lors de l'ajout d'un bureau, celui-ci s'affiche dans RVIZ à sa position.  
 Lors de la supression de l'un d'eux, l'affichage est pour le moment encore là tant qu'il n'y a pas redémarrage de la node.  
 
-![RVIZ_desktop_marker](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Rviz_desktop_marker.png)  
+![RVIZ_desktop_marker](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/Rviz_desktop_marker.png)  
 
-### Création de la carte du bâtiment à mapper" 
+### Création de la carte du bâtiment à mapper 
 **Commande de lancement**  
 ``` roslaunch projet_fetch mapping.launch```  
 
@@ -84,7 +84,7 @@ Une fois la commande lancée, il suffit de déplacer le robot dans l'environneme
 Quand la carte est complète, l'enregistrement de celle-ci est possible via la commande suivante qui l'enregistre dans le dossier ouvert :  
 ``` rosrun map_server map_saver <map_name>```
 
-**Visualisation**
+**Visualisation**  
 La visualisation de la map en création est possible directement dans Rviz.   
 <Image a inserer ici>
 
@@ -112,14 +112,14 @@ Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :
 Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous :  
 <Inserer ici l'image de l'interface web avec les exemple de boutons correspondants aux bureaux>  
  
-Fonctionnement des différents launch files
+Fonctionnement des différents launch files sous forme de rqt_graph
 ==
 
 ### La gestion de bureaux objectifs 
   
-Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
+Fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)  
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/Bureaux_data_rqt.png)  
 
 #### Fonctionnement des différentes parties 
 

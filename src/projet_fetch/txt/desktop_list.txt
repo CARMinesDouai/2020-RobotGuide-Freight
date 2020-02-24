@@ -10,3 +10,27 @@ D5
 [-11.4,6.042]
 D6
 [-11.7,12.52]
+bonjour
+[-11.7,12.52]
+Mr abdelouis
+[-11.7,12.52]
+Mr paul
+[-11.7,12.52]
+Mr christiant
+[-11.7,12.52]
+Mme bricolage
+[-11.7,12.52]
+Madame cool
+[-11.7,12.52]
+Madame coole
+[-11.7,12.52]
+Madame coolee
+[-11.7,12.52]
+Madame cooleee
+[-11.7,12.52]
+Madame coolrr
+[-11.7,12.52]
+Madame coolr
+[-11.7,12.52]
+Madame coolrrr
+[-11.7,12.52]
