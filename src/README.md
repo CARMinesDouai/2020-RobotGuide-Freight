@@ -21,7 +21,7 @@ Arthur JOSI : Partie déplacement
 Configuration de la connexion au fetch :
 ==
 - Ouvrir le fichier bashrc :  
-    cd ~/.bashrc  
+    ```cd ~/.bashrc```  
 - Copier les lignes suivantes en fin de fichier :  
     export ROS_MASTER_URI=http://freight100.local:11311  
     export ROS_IP=<my_address_ip>  
