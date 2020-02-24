@@ -26,11 +26,7 @@ def desktop_pose(data) :
 
 def rewrite(desktop_coord):
 	global first_point
-	for k in range(2):
-		if desktop_coord[k] < 0 :
-			desktop_coord[k]= round(desktop_coord[k],2)
-		else :
-			desktop_coord[k] = round(desktop_coord[k],3)
+	desktop_coord = gestions_chiffres_significatifs( desktop_coord )
 	#y = input("Rewrite (1), Add (2), Suppress (3)")
 	x = input("Entrer le nom du bureau correspondant entre deux guillemet : ")
 	if first_point :
@@ -52,11 +48,7 @@ def Add(data):
 	desktop_coord=[0,0]
 	desktop_coord[0] = data.point.x
 	desktop_coord[1] = data.point.y
-	for k in range(2):
-		if desktop_coord[k] < 0 :
-			desktop_coord[k]= round(desktop_coord[k],2)
-		else :
-			desktop_coord[k] = round(desktop_coord[k],3)
+	desktop_coord = gestions_chiffres_significatifs( desktop_coord )
 	x = input("Entrer le nom du bureau correspondant entre deux guillemet : ")	
 	fichier = open("/home/bot/catkin_ws/src/projet_fetch/txt/desktop_list.txt", "a")
 	fichier.write("\n" + str(x))
@@ -64,6 +56,30 @@ def Add(data):
 	print("Desktop {} added".format(x))
 	print("Coord added : " + str(desktop_coord))
 	print("Waiting for an other publish point on RVIZ")
+
+def gestions_chiffres_significatifs( desktop_coord ) :
+	for k in range(2):
+		if desktop_coord[k] < 0 :
+			#Gestion du nombre de chiffre dans le nombre recupere
+			if desktop_coord[k] > -10.0 :
+				desktop_coord[k]= round(desktop_coord[k],2)
+				desktop_coord[k] = desktop_coord[k] + 0.01
+			elif desktop_coord[k] > -100.0 and desktop_coord[k]< -10.0 :
+				desktop_coord[k]= round(desktop_coord[k],1)
+			else : 	
+				desktop_coord[k] = round(desktop_coord[k],0)
+		
+		else :
+			#Meme gestion pour un nombre positif 
+			if desktop_coord[k] < 10.0 :
+				desktop_coord[k] = round(desktop_coord[k],3)
+				desktop_coord[k] = desktop_coord[k] + 0.001
+			elif desktop_coord[k] >= 10.0 and desktop_coord[k] < 100.0 : 
+				desktop_coord[k] = round(desktop_coord[k],2)
+				desktop_coord[k] = desktop_coord[k] + 0.01
+			else : 
+				desktop_coord[k] = round(desktop_coord[k],1)
+	return(desktop_coord)		
 
 def suppresion() : 
 	global desktop_line_to_supress

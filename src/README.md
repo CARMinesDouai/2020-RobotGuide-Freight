@@ -18,19 +18,20 @@ Pour le moment :
 Thibaut Desfachelles : Partie vision - Suivi et tracking  
 Arthur JOSI : Partie déplacement - Partie web 
 
-Configuration de l'envronnement :
+Configuration de l'environnement :
 ==
 
-#### Prérequis d'utilisation
+**Prérequis d'utilisation :**  
 Il est nécéssaire d'être sous kinetic pour le bon fonctionnement des parties à suivre.  
 Le tutoriel Turtlebot Bringup doit avoir été complété.   
+
 **Configuration du bashrc :**  
 Ouverture du fichier :  
 ```cd ~/.bashrc```  
 Ajout de cette ligne en fin de fichier :  
 ```source $HOME/catkin_ws/devel/setup.bash```  
 
-**Installing project :**  
+**Installation du projet :**  
 ```cd <catkin_repo>/src```
 ```git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```
 
@@ -58,11 +59,23 @@ Les différents launch files du package "Projet_fetch" et leur utilisation :
 ### Gestion des bureaux présents dans le bâtiment 
 **Commande de lancement**  
 ``` roslaunch projet_fetch desktop_manager.launch```  
+
 **Utilisation**  
+La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
+  1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
+  2 - Ajouter un bureau à la liste des bureaux disponibles.   
+  3 - Supprimer un bureau de la liste.  
+
+**Visualisation**  
+Lors de l'ajout d'un bureau, celui-ci s'affiche dans RVIZ à sa position.  
+Lors de la supression de l'un d'eux, l'affichage est pour le moment encore là tant qu'il n'y a pas redémarrage de la node.  
+
+![RVIZ_desktop_marker](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Rviz_desktop_marker.png)  
 
 ### Création de la carte du bâtiment à mapper" 
 **Commande de lancement**  
 ``` roslaunch projet_fetch mapping.launch```  
+
 **Utilisation**  
 
 
@@ -73,10 +86,13 @@ Sans évitement d'obstacles locaux :
 Avec évitement d'obstacles locaux :  
 ``` roslaunch projet_fetch move_to_with_avoid.launch```  
 
+**Utilisation**  
+
 ### Déplacement du robot vers un point objectif depuis application web 
 **Commande de lancement**  
 Lancement du launch file  :  
 ``` roslaunch projet_fetch web_app.launch ```  
+
 **Utilisation**  
 Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
 ```http://<robot ip>:8080```  
@@ -88,16 +104,9 @@ Fonctionnement des différents launch files
   
 Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)  
 
-#### Utilisation :
-
-La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
-  1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
-  2 - Ajouter un bureau à la liste des bureaux disponibles.   
-  3 - Supprimer un bureau de la liste.  
-
-#### Fonctionnement
+#### Fonctionnement des différentes parties 
 
 ### Mapping à partir du robot turtlebot
 
