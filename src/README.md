@@ -21,7 +21,7 @@ Arthur JOSI : Partie déplacement - Partie web
 Configuration de l'envronnement :
 ==
 
-####Prérequis d'utilisation
+#### Prérequis d'utilisation
 Il est nécéssaire d'être sous kinetic pour le bon fonctionnement des parties à suivre.  
 Le tutoriel Turtlebot Bringup doit avoir été complété.   
 **Configuration du bashrc :**  
@@ -31,11 +31,11 @@ Ajout de cette ligne en fin de fichier :
 ```source $HOME/catkin_ws/devel/setup.bash```  
 
 **Installing project :**  
-```cd <catkin_repo>/src
-git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```
+```cd <catkin_repo>/src```
+```git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```
 
 
-####A mettre dans les annexes
+#### A mettre dans les annexes
 - Ouvrir le fichier bashrc :  
     ```cd ~/.bashrc```  
 - Copier les lignes suivantes en fin de fichier :  
