@@ -48,11 +48,6 @@ Ajout de cette ligne en fin de fichier :
 - Ajouter l'invité correspondant au robot :   
     ```10.1.16.68	freight100```  
 
-Package ROS :
-==
-Le package Projet_fetch regroupe tous les fichiers important au bon fonctionnement du robot.
-
-
 Les différents launch files du package "Projet_fetch" et leur utilisation :  
 ==
 
@@ -110,8 +105,9 @@ Lancement du launch file  :
 Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
 ```http://<robot ip>:8080```  
 Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous :  
-<Inserer ici l'image de l'interface web avec les exemple de boutons correspondants aux bureaux>  
- 
+
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_web.png)  
+
 Fonctionnement des différents launch files sous forme de rqt_graph
 ==
 
@@ -119,7 +115,7 @@ Fonctionnement des différents launch files sous forme de rqt_graph
   
 Fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/Bureaux_data_rqt.png)  
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
 
 #### Fonctionnement des différentes parties 
 

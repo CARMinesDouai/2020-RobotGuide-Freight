@@ -1,36 +1,12 @@
-D1
+G.Lozenguez
 [1.392,-1.28]
-D2
+L.Fabresse
 [1.004,6.141]
-D3
+N.Bouraqadi
 [1.595,-4.62]
-D4
+S.Ambellouis
 [-11.2,0.113]
-D5
+A.Fleury
 [-11.4,6.042]
-D6
-[-11.7,12.52]
-bonjour
-[-11.7,12.52]
-Mr abdelouis
-[-11.7,12.52]
-Mr paul
-[-11.7,12.52]
-Mr christiant
-[-11.7,12.52]
-Mme bricolage
-[-11.7,12.52]
-Madame cool
-[-11.7,12.52]
-Madame coole
-[-11.7,12.52]
-Madame coolee
-[-11.7,12.52]
-Madame cooleee
-[-11.7,12.52]
-Madame coolrr
-[-11.7,12.52]
-Madame coolr
-[-11.7,12.52]
-Madame coolrrr
+A.Doniec
 [-11.7,12.52]
