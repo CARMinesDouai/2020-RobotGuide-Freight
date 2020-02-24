@@ -31,7 +31,7 @@ Ajout de cette ligne en fin de fichier :
 ```source $HOME/catkin_ws/devel/setup.bash```  
 
 **Installing project :**  
-```cd <catkin_repo>/src  
+```cd <catkin_repo>/src
 git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```
 
 
