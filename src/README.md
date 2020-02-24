@@ -23,7 +23,7 @@ Configuration de l'environnement :
 
 **Prérequis d'utilisation :**  
 Il est nécéssaire d'être sous kinetic pour le bon fonctionnement des parties à suivre.  
-Le tutoriel Turtlebot Bringup doit avoir été complété.   
+Le tutoriel pour le Turtlebot Bringup doit avoir été complété.   
 
 **Configuration du bashrc :**  
 Ouverture du fichier :  
@@ -65,8 +65,11 @@ La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois 
   1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
   2 - Ajouter un bureau à la liste des bureaux disponibles.   
   3 - Supprimer un bureau de la liste.  
+La gestion se fait pour le moment dans la console, les commandes à entrer sont indiquées (Sauf pour quitter où la commande CTRL + C est necessaire) :
 
-**Visualisation**  
+![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/desktop_manager.png)  
+
+**Visualisation des bureaux**  
 Lors de l'ajout d'un bureau, celui-ci s'affiche dans RVIZ à sa position.  
 Lors de la supression de l'un d'eux, l'affichage est pour le moment encore là tant qu'il n'y a pas redémarrage de la node.  
 
@@ -77,6 +80,13 @@ Lors de la supression de l'un d'eux, l'affichage est pour le moment encore là t
 ``` roslaunch projet_fetch mapping.launch```  
 
 **Utilisation**  
+Une fois la commande lancée, il suffit de déplacer le robot dans l'environnement à mapper.  
+Quand la carte est complète, l'enregistrement de celle-ci est possible via la commande suivante qui l'enregistre dans le dossier ouvert :  
+``` rosrun map_server map_saver <map_name>```
+
+**Visualisation**
+La visualisation de la map en création est possible directement dans Rviz.   
+<Image a inserer ici>
 
 
 ### Déplacement du robot vers un point objectif depuis RVIZ
@@ -87,6 +97,9 @@ Avec évitement d'obstacles locaux :
 ``` roslaunch projet_fetch move_to_with_avoid.launch```  
 
 **Utilisation**  
+Le départ du robot se fait toujours à la position ou il apparait sur rviz et selon la même orientation.  
+A noter que sa position et son orientation est modifiable.
+Une fois le launch file lancé, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ. 
 
 ### Déplacement du robot vers un point objectif depuis application web 
 **Commande de lancement**  
@@ -96,7 +109,9 @@ Lancement du launch file  :
 **Utilisation**  
 Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
 ```http://<robot ip>:8080```  
-
+Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous :  
+<Inserer ici l'image de l'interface web avec les exemple de boutons correspondants aux bureaux>  
+ 
 Fonctionnement des différents launch files
 ==
 
