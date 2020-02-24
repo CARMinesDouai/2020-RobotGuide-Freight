@@ -52,26 +52,52 @@ Package ROS :
 Le package Projet_fetch regroupe tous les fichiers important au bon fonctionnement du robot.
 
 
-Les différents launch files du package "Projet_fetch" :  
+Les différents launch files du package "Projet_fetch" et leur utilisation :  
 ==
 
 ### Gestion des bureaux présents dans le bâtiment 
-``` launch ```  
+**Commande de lancement**  
+``` roslaunch projet_fetch desktop_manager.launch```  
+**Utilisation**  
+
 ### Création de la carte du bâtiment à mapper" 
-``` launch ```  
+**Commande de lancement**  
+``` roslaunch projet_fetch mapping.launch```  
+**Utilisation**  
+
+
 ### Déplacement du robot vers un point objectif depuis RVIZ
+**Commande de lancement**  
 Sans évitement d'obstacles locaux :  
-``` launch ```  
+``` roslaunch projet_fetch move_to_without_avoid.launch```  
 Avec évitement d'obstacles locaux :  
-``` launch ```  
+``` roslaunch projet_fetch move_to_with_avoid.launch```  
+
 ### Déplacement du robot vers un point objectif depuis application web 
+**Commande de lancement**  
 Lancement du launch file  :  
-``` launch ```  
+``` roslaunch projet_fetch web_app.launch ```  
+**Utilisation**  
 Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
 ```http://<robot ip>:8080```  
 
-Fonctionnement des launch files
+Fonctionnement des différents launch files
 ==
+
+### La gestion de bureaux objectifs 
+  
+Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
+
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)
+
+#### Utilisation :
+
+La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
+  1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
+  2 - Ajouter un bureau à la liste des bureaux disponibles.   
+  3 - Supprimer un bureau de la liste.  
+
+#### Fonctionnement
 
 ### Mapping à partir du robot turtlebot
 
@@ -82,19 +108,6 @@ Fonctionnement des launch files
 #### Déplacement réactif 
 
 ### Déplacement du robot depuis une interface web
-
-### La gestion de bureaux objectifs 
-  
-Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
-
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/Bureaux_data_rqt.png)
-
-#### Explications :
-
-La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
-  1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
-  2 - Ajouter un bureau à la liste des bureaux disponibles.   
-  3 - Supprimer un bureau de la liste.  
   
 **Cas 1 et 2 :**  
 Dans cette configuration, la node attend qu'un point soit publié sur RVIZ. Une fois cela fait, les coordonnées sont enregistré dans un fichier txt si l'utilisateur rentre le nom du bureau associé.   
