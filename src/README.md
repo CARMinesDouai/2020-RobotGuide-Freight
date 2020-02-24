@@ -67,23 +67,23 @@ Avec évitement d'obstacles locaux :
 ### Déplacement du robot vers un point objectif depuis application web 
 Lancement du launch file  :  
 ``` launch ```  
-Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :
+Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
 ```http://<robot ip>:8080```  
 
 Fonctionnement des launch files
 ==
 
-## Mapping à partir du robot turtlebot
+### Mapping à partir du robot turtlebot
 
-## Déplacement du robot 
+### Déplacement du robot 
 
 #### Déplacement non réactif (sans évitement d'objets locaux non présent dans la map) 
 
 #### Déplacement réactif 
 
-## Déplacement du robot depuis une interface web
+### Déplacement du robot depuis une interface web
 
-## La gestion de bureaux objectifs 
+### La gestion de bureaux objectifs 
   
 Le rqt graph ci-dessous permet de présenter le fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
 
