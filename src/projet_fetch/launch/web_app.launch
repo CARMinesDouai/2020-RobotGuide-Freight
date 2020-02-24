@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- Desktop name Publisher -->
+	<node pkg="projet_fetch" type="desktop_name_publisher.py" name="desktop_name_publisher"/>
+
+	<!-- Run the web application -->
+	<node pkg="turtlebot_web" type="run.sh" name="web_app" />
+
+	<!-- Destop coordinate Publisher -->
+	<node pkg="projet_fetch" type="get_and_send_desktop_to_reach.py" name="desktop_coord_publisher" />
+
+	<!-- Ajouter ici les nodes de gestion du robot et d ouverture de rviz etc... --> 
+
+</launch>

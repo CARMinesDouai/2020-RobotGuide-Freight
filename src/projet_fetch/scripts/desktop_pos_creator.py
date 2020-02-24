@@ -113,7 +113,13 @@ if __name__ == '__main__':
 	#Subscriber to selected points on RVIZ
 	#rospy.Subscriber('/move_base_simple/goal', PoseStamped, ask_for_coord)
 	rospy.Subscriber('/desktop_coord_to_supress', PoseStamped, ask_for_coord) 
-	y = input("Rewrite? (1), Add? (2), Suppress? (3)") 
+
+	while True : 
+		y = input("Rewrite? (1), Add? (2), Suppress? (3)")
+		if y not in [1,2,3] :
+			print("Wrong value, enter another one")
+		else : 
+			break
 	if y == 1 : 
 		print("Rewrite mode selected")
 		print("Waiting for published point on RVIZ")
@@ -122,9 +128,9 @@ if __name__ == '__main__':
 		print("Add desktop mode selected")
 		print("Waiting for published point on RVIZ")
 		rospy.Subscriber('/clicked_point', PointStamped, Add)
-	
+
 	if y == 3 :
-		while y == 3 or y==1 :
+		while True :
 			suppresion()
 			#y = input("Continue (1), Quit (2)")
 	

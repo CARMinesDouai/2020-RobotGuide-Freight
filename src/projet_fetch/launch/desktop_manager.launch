@@ -1,18 +1,22 @@
 <?xml version="1.0"?>
 <launch>
 
+	<!-- Desktop data manager -->
 	<node name="desktop_pos_creator" pkg="projet_fetch" type="desktop_pos_creator.py" output="screen" />
-	  <!-- Map server -->
-	  <!--<arg name="map_file" default="$(env TURTLEBOT_MAP_FILE)"/> -->
-	  <arg name="map_file" default="/home/bot/catkin_ws/src/projet_fetch/map/Lahure.yaml"/>
-	  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+	
+	<!-- Map server - Get the map needed -->
+	<arg name="map_file" default="/home/bot/catkin_ws/src/projet_fetch/map/Lahure.yaml"/>
+	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
- 
-  	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find projet_fetch)/rviz/navigation.rviz"/>
+ 	<!-- Open rviz well configured -->
+  	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find projet_fetch)/rviz/desktop_manager.rviz"/>
 
+	<!-- Desktop marker publisher -->
+	<node name="desktop_marker" pkg="projet_fetch" type="desktop_pos_markers.py" />
+
+	<!-- Get desktop coord to supress -->
 	<node name="get_desktop_coord" pkg="projet_fetch" type="send_coord_desktop_to_supress.py" />
 
 
-	<!--<node name="projet_fetch" pkg="projet_fetch" type="move_to.py"  />-->
 </launch>
 
