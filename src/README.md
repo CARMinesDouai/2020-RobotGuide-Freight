@@ -21,15 +21,15 @@ Arthur JOSI : Partie déplacement
 Configuration de la connexion au fetch :
 ==
 - Ouvrir le fichier bashrc :  
-*cd ~/.bashrc*  
+    cd ~/.bashrc  
 - Copier les lignes suivantes en fin de fichier :  
-*export ROS_MASTER_URI=http://freight100.local:11311*  
-*export ROS_IP=<my_address_ip>*  
+    export ROS_MASTER_URI=http://freight100.local:11311  
+    export ROS_IP=<my_address_ip>  
 
 - Ouvrir ensuite le fichier hosts :  
-*sudo nano /etc/hosts*  
-Ajouter l'invité correspondant au robot :   
-*10.1.16.68	freight100*  
+    sudo nano /etc/hosts  
+- Ajouter l'invité correspondant au robot :   
+    10.1.16.68	freight100*  
 
 Package ROS :
 ==
@@ -117,5 +117,7 @@ Dans cette configuration, la node attend qu'un point soit publié sur RVIZ. Une 
 
 **Cas 3 :**  
 Dans cette configuration, l'utilisateur envoie le nom du bureau qu'il veut supprimer. Le nom du bureau est envoyé à la node "get_and_send_desktop" qui publie alors les coordonnées coordonnées correspondantes à supprimer.  
+
+
 
 
