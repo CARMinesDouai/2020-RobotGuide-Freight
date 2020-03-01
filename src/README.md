@@ -5,7 +5,9 @@
 Description du projet :
 ==
 L'objectif de ce projet est de travailler avec un robot et d'en faire un robot d'acceuil.  
+
 Le fonctionnement du robot à l'aboutissement du projet est donc le suivant :  
+
 - Un utilisateur doit pouvoir selectionner le bureau de la personne qu'il veut rejoindre sur une interface graphique (Sur une tablette par exemple).  
 - Le robot doit accompagner la personne au bureau demandé. Il doit donc prendre le chemin le plus efficace et s'arrêter une fois arrivé.  
 - Au cours du trajet, le robot doit être capable d'éviter des objets imprévus à l'origine (Comme une personne ou un carton par exemple, contrairement à un mur l'est dans le bâtiment).  
@@ -57,7 +59,7 @@ Ajout de cette ligne en fin de fichier :
 Les différents launch files du package "Projet_fetch" et leur utilisation :  
 ==
 
-### Gestion des bureaux présents dans le bâtiment 
+## Gestion des bureaux présents dans le bâtiment 
 **Commande de lancement**  
 ``` roslaunch projet_fetch desktop_manager.launch```  
 
@@ -76,7 +78,7 @@ Lors de la supression de l'un d'eux, l'affichage est pour le moment encore là t
 
 ![RVIZ_desktop_marker](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/Rviz_desktop_marker.png)  
 
-### Création de la carte du bâtiment à mapper 
+## Création de la carte du bâtiment à mapper 
 **Commande de lancement**  
 ``` roslaunch projet_fetch mapping.launch```  
 
@@ -90,7 +92,7 @@ La visualisation de la map en création est possible directement dans Rviz.
 <Image a inserer ici>
 
 
-### Déplacement du robot vers un point objectif depuis RVIZ
+## Déplacement du robot vers un point objectif depuis RVIZ
 **Commande de lancement**  
 Sans évitement d'obstacles locaux :  
 ``` roslaunch projet_fetch move_to_without_avoid.launch```  
@@ -102,7 +104,7 @@ Le départ du robot se fait toujours à la position ou il apparait sur rviz et s
 A noter que sa position et son orientation est modifiable.
 Une fois le launch file lancé, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ. 
 
-### Déplacement du robot vers un point objectif depuis application web 
+## Déplacement du robot vers un point objectif depuis application web 
 **Commande de lancement**  
 Lancement du launch file  :  
 ``` roslaunch projet_fetch web_app.launch ```  
@@ -117,7 +119,7 @@ Selection du bureau à rejoindre via l'un des différents bouttons affichés à 
 Fonctionnement des différents launch files sous forme de rqt_graph
 ==
 
-### La gestion de bureaux objectifs 
+## La gestion de bureaux objectifs 
   
 Fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
 
@@ -125,15 +127,15 @@ Fonctionnement de la gestion de la base de donnée des bureaux et de leurs coord
 
 #### Fonctionnement des différentes parties 
 
-### Mapping à partir du robot turtlebot
+## Mapping à partir du robot turtlebot
 
-### Déplacement du robot 
+## Déplacement du robot 
 
 #### Déplacement non réactif (sans évitement d'objets locaux non présent dans la map) 
 
 #### Déplacement réactif 
 
-### Déplacement du robot depuis une interface web
+## Déplacement du robot depuis une interface web
   
 **Cas 1 et 2 :**  
 Dans cette configuration, la node attend qu'un point soit publié sur RVIZ. Une fois cela fait, les coordonnées sont enregistré dans un fichier txt si l'utilisateur rentre le nom du bureau associé.   
