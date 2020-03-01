@@ -143,7 +143,8 @@ Fonctionnement des launch files via rqt_graph
 **Explications :**  
 La node "desktop_manager" est la node permettant l'échange avec l'utilisateur.  
 Lors de l'ajout de bureaux dans la base de donnée, cette node est prête à récuperer les coordonnées du bureau à ajouter qui lui sont envoyées depuis RVIZ sur le topic /clicked_point.  
-Lorsque l'utilisateur veut supprimer un bureau, il rentre son nom qui est alors envoyé via le topic /desktop_name_to_suppress. La node Desktop_getName_and_sendCoord récupère le nom du bureau et publie les coordonnées correspondantes et desktop_manager va les supprimer.  
+Lorsque l'utilisateur veut supprimer un bureau, il rentre son nom qui est alors envoyé via le topic /desktop_name_to_suppress.  
+La node Desktop_getName_and_sendCoord récupère alors le nom du bureau et publie les coordonnées correspondantes et desktop_manager va les supprimer.  
 
 ## Mapping à partir du robot turtlebot
 
@@ -177,7 +178,7 @@ Lorsque l'utilisateur veut supprimer un bureau, il rentre son nom qui est alors 
 
 **Explications :**  
 
-Description des différentes nodes du package "Projet_fetch" :  
+Description des différentes nodes :  
 == 
  
 Les nodes sont placées dans le dossier scripts du package.  
@@ -229,6 +230,8 @@ Cette node permet la reconnaissance faciale de la personne qui suit le robot:
 - Elle renvoie un message ROS constitué de 2 variables (1 bool et 1 int) donnant la présence ou non d'une personne et la distance à laquelle se trouve la personne.  
 - La reconnaissance faciale est basée sur du deep learning, des modéles pre-entrainés provenant de la bibliothéque dlib sont utilisés afin de reconnaitre les visages des personnes selon la forme de leur visage.  
 
+Vidéo de présentation du projet :
+==
 Voies d'amélioration du projet :
 ==
 - Gestion de la base de donnée de bureaux plus propre directement via l'interface web  
