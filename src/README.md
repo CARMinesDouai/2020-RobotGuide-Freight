@@ -5,10 +5,16 @@
 Description du projet :
 ==
 L'objectif de ce projet est de travailler avec un robot et d'en faire un robot d'acceuil.  
-Cet objectif décompose le projet en différentes grandes parties :  
+Le fonctionnement du robot à l'aboutissement du projet est donc le suivant :  
+- Un utilisateur doit pouvoir selectionner le bureau de la personne qu'il veut rejoindre sur une interface graphique (Sur une tablette par exemple).  
+- Le robot doit accompagner la personne au bureau demandé. Il doit donc prendre le chemin le plus efficace et s'arrêter une fois arrivé.  
+- Au cours du trajet, le robot doit être capable d'éviter des objets imprévus à l'origine (Comme une personne ou un carton par exemple, contrairement à un mur l'est dans le bâtiment).  
+- Des capteur doivent permettre d'indiquer la présence de la personne supposée le suivre. Effectivement, le robot doit s'arrêter si la personne ne suit plus (Si elle s'arrête pour discutter avec une autre personne par exemple.)
+- Le robot doit éventuellement être capable de suivre une personne dans le batîment.
+
+Ces objectifs de fonctionnement décomposent donc le projet en trois grandes parties :  
 - La brique de déplacement réactive du robot permettant d'aller d'un bureau à un autre  
 - La brique de vision du robot permettant de s'assurer le suivi de la personne interessée ou de suivre cette personne dans le bâtiment.  
-- La brique de conception du robot consistant en la création d'une structure permettant de porter une tablette, des caméras, un ou plusieurs ordinateurs.  
 - La brique d'interaction avec l'utilisateur permettant donc à celui-ci de choisir le bureau de la personne qu'il veut rejoindre.  
 
 Répartission du travail : 
