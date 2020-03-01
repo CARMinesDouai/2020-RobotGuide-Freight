@@ -37,11 +37,17 @@ Le tutoriel pour le Turtlebot Bringup doit avoir été complété.
 Ouverture du fichier :  
 ```cd ~/.bashrc```  
 Ajout de cette ligne en fin de fichier :  
-```source $HOME/catkin_ws/devel/setup.bash```  
+```source $HOME/catkin_ws/devel/setup.bash``` 
+
+**Installer le nécessaire pour la partie web**
+ ```sudo apt install ros-kinetic-rosbridge-server ros-kinetic-robot-pose-publisher```  
+ ```sudo apt install nodejs-legacy```  
+ ```sudo apt install ros-kinetic-web-video-server```  
 
 **Installation du projet :**  
-```cd <catkin_repo>/src```
-```git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```
+```cd <catkin_repo>/src```  
+*Attention à la ligne suivante, il faudra uniquement y mettre ce qui est éxistant dans 2020-robot-guide/src (voir pour la création d'un ZIP ou juste faire une commande pour lier le dossier au bon endroit)*  
+```git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```  
 
 
 #### A mettre dans les annexes
@@ -61,13 +67,16 @@ Les différents launch files du package "Projet_fetch" et leur utilisation :
 
 ## Gestion des bureaux présents dans le bâtiment 
 **Commande de lancement**  
+Par défaut, la map "Lahure.yaml" est ouverte :  
 ``` roslaunch projet_fetch desktop_manager.launch```  
+Pour changer de map, il suffit de placer celle-ci dans le dossier "map" du package "Projet_fetch" puis d'utiliser la commande suivante :  
+```roslaunch projet_fetch desktop_manager.launch map_name:="<<map name>"```  
 
 **Utilisation**  
 La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
   1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
   2 - Ajouter un bureau à la liste des bureaux disponibles.   
-  3 - Supprimer un bureau de la liste.  
+  3 - Supprimer un bureau de la liste existante.  
 La gestion se fait pour le moment dans la console, les commandes à entrer sont indiquées (Sauf pour quitter où la commande CTRL + C est necessaire) :
 
 ![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_manager.png)  
@@ -83,12 +92,12 @@ Lors de la supression de l'un d'eux, l'affichage est pour le moment encore là t
 ``` roslaunch projet_fetch mapping.launch```  
 
 **Utilisation**  
-Une fois la commande lancée, il suffit de déplacer le robot dans l'environnement à mapper.  
+Une fois la commande lancée, il suffit de déplacer le robot dans l'environnement à mapper avec les touches du clavier.  
 Quand la carte est complète, l'enregistrement de celle-ci est possible via la commande suivante qui l'enregistre dans le dossier ouvert :  
 ``` rosrun map_server map_saver <map_name>```
 
 **Visualisation**  
-La visualisation de la map en création est possible directement dans Rviz.   
+La visualisation de la map en création est possible directement dans Rviz, déjà ouvert avec la commande de lancement.   
 <Image a inserer ici>
 
 
