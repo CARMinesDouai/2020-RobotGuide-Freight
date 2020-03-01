@@ -39,7 +39,7 @@ Ouverture du fichier :
 Ajout de cette ligne en fin de fichier :  
 ```source $HOME/catkin_ws/devel/setup.bash``` 
 
-**Installer le nécessaire pour la partie web**
+**Installer le nécessaire pour la partie web**  
  ```sudo apt install ros-kinetic-rosbridge-server ros-kinetic-robot-pose-publisher```  
  ```sudo apt install nodejs-legacy```  
  ```sudo apt install ros-kinetic-web-video-server```  
@@ -113,7 +113,7 @@ Avec évitement d'obstacles locaux :
 ```roslaunch move_to.launch avoid:="true" web_app:="false"```  
 
 **Utilisation**  
-Le départ du robot se fait toujours à la position ou il apparait sur rviz et selon la même orientation.  
+Le départ du robot se fait toujours à la position où il apparait sur rviz et selon la même orientation.  
 A noter que sa position et son orientation est modifiable.  
 Une fois la commande roslaunch faite, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ.  
 
@@ -131,33 +131,51 @@ Selection du bureau à rejoindre via l'un des différents bouttons affichés à 
 
 ![Bureaux joignables](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_web.png)  
 
-Fonctionnement des différents launch files sous forme de rqt_graph
+Fonctionnement des launch files via rqt_graph
 ==
 
 ## La gestion de bureaux objectifs 
   
-Fonctionnement de la gestion de la base de donnée des bureaux et de leurs coordonnées.  
+**Rqt_graph :**  
 
 ![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
 
-#### Fonctionnement des différentes parties 
+**Explications :**  
+La node "desktop_manager" est la node permettant l'échange avec l'utilisateur.  
+Lors de l'ajout de bureaux dans la base de donnée, cette node est prête à récuperer les coordonnées du bureau à ajouter qui lui sont envoyées depuis RVIZ sur le topic /clicked_point.  
+Lorsque l'utilisateur veut supprimer un bureau, il rentre son nom qui est alors envoyé via le topic /desktop_name_to_suppress. La node Desktop_getName_and_sendCoord récupère le nom du bureau et publie les coordonnées correspondantes et desktop_manager va les supprimer.  
 
 ## Mapping à partir du robot turtlebot
 
+**Rqt_graph :**  
+
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
+
+**Explications :**  
+
 ## Déplacement du robot 
 
-#### Déplacement non réactif (sans évitement d'objets locaux non présent dans la map) 
+**Rqt_graph :**  
 
-#### Déplacement réactif 
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
 
-## Déplacement du robot depuis une interface web
-  
-**Cas 1 et 2 :**  
-Dans cette configuration, la node attend qu'un point soit publié sur RVIZ. Une fois cela fait, les coordonnées sont enregistré dans un fichier txt si l'utilisateur rentre le nom du bureau associé.   
+**Explications :**  
 
-**Cas 3 :**  
-Dans cette configuration, l'utilisateur envoie le nom du bureau qu'il veut supprimer. Le nom du bureau est envoyé à la node "get_and_send_desktop" qui publie alors les coordonnées coordonnées correspondantes à supprimer.  
+#### Déplacement réactif et non réactif
 
+**Rqt_graph :**  
+
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
+
+**Explications :**  
+
+## Déplacement du robot depuis l'interface web
+
+**Rqt_graph :**  
+
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
+
+**Explications :**  
 
 Description des différentes nodes du package "Projet_fetch" :  
 == 
