@@ -10,6 +10,9 @@
 	<!-- Destop coordinate Publisher -->
 	<node pkg="projet_fetch" type="get_and_send_desktop_to_reach.py" name="desktop_coord_publisher" />
 
+	<!-- Get desktop coord to supress -->
+	<node name="get_desktop_coord" pkg="projet_fetch" type="send_coord_desktop_to_supress.py" />
+
 	<!-- Ajouter ici les nodes de gestion du robot et d ouverture de rviz etc... --> 
 
 </launch>
