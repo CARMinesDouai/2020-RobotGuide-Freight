@@ -62,21 +62,24 @@ Ajout de cette ligne en fin de fichier :
 - Ajouter l'invité correspondant au robot :   
     ```10.1.16.68	freight100```  
 
-Les différents launch files du package "Projet_fetch" et leur utilisation :  
+Les launch files et leur utilisation  
 ==
 
 ## Gestion des bureaux présents dans le bâtiment 
 **Commande de lancement**  
 Par défaut, la map "Lahure.yaml" est ouverte :  
 ``` roslaunch projet_fetch desktop_manager.launch```  
-Pour changer de map, il suffit de placer celle-ci dans le dossier "map" du package "Projet_fetch" puis d'utiliser la commande suivante :  
-```roslaunch projet_fetch desktop_manager.launch map_name:="<<map name>"```  
+
+Pour utiliser une autre map : 
+- Placer celle-ci dans le dossier "map" du package "Projet_fetch"  
+- Utiliser la commande suivante :  
+```roslaunch projet_fetch desktop_manager.launch map_name:="<map name>"```  
 
 **Utilisation**  
 La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois options s'offrent à lui :   
-  1 - Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
-  2 - Ajouter un bureau à la liste des bureaux disponibles.   
-  3 - Supprimer un bureau de la liste existante.  
+  1- Créer/ Recréer la liste des bureaux disponibles dans le bâtiment.   
+  2- Ajouter un bureau à la liste des bureaux disponibles.   
+  3- Supprimer un bureau de la liste existante.  
 La gestion se fait pour le moment dans la console, les commandes à entrer sont indiquées (Sauf pour quitter où la commande CTRL + C est necessaire) :
 
 ![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_manager.png)  
@@ -104,26 +107,29 @@ La visualisation de la map en création est possible directement dans Rviz, déj
 ## Déplacement du robot vers un point objectif depuis RVIZ
 **Commande de lancement**  
 Sans évitement d'obstacles locaux :  
-``` roslaunch projet_fetch move_to_without_avoid.launch```  
+```roslaunch move_to.launch avoid:="false" web_app:="false"```  
+
 Avec évitement d'obstacles locaux :  
-``` roslaunch projet_fetch move_to_with_avoid.launch```  
+```roslaunch move_to.launch avoid:="true" web_app:="false"```  
 
 **Utilisation**  
 Le départ du robot se fait toujours à la position ou il apparait sur rviz et selon la même orientation.  
-A noter que sa position et son orientation est modifiable.
-Une fois le launch file lancé, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ. 
+A noter que sa position et son orientation est modifiable.  
+Une fois la commande roslaunch faite, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ.  
 
 ## Déplacement du robot vers un point objectif depuis application web 
 **Commande de lancement**  
-Lancement du launch file  :  
-``` roslaunch projet_fetch web_app.launch ```  
+Web app et déplacement du robot sans évitement d'obstacles locaux :  
+``` roslaunch projet_fetch move_to.launch avoid:="false" web_app:="true"```  
+Web app et déplacement du robot avec évitement d'obstacles locaux :  
+``` roslaunch projet_fetch move_to.launch avoid:="true" web_app:="true"```  
 
 **Utilisation**  
 Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
 ```http://<robot ip>:8080```  
 Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous :  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_web.png)  
+![Bureaux joignables](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_web.png)  
 
 Fonctionnement des différents launch files sous forme de rqt_graph
 ==
@@ -205,6 +211,10 @@ Cette node permet la reconnaissance faciale de la personne qui suit le robot:
 - Elle renvoie un message ROS constitué de 2 variables (1 bool et 1 int) donnant la présence ou non d'une personne et la distance à laquelle se trouve la personne.  
 - La reconnaissance faciale est basée sur du deep learning, des modéles pre-entrainés provenant de la bibliothéque dlib sont utilisés afin de reconnaitre les visages des personnes selon la forme de leur visage.  
 
-
+Voies d'amélioration du projet :
+==
+- Gestion de la base de donnée de bureaux plus propre directement via l'interface web  
+- Brique d'évitement plus réactive  
+- Affichage de la carte avec le robot dessus sur l'interface web  
 
 
