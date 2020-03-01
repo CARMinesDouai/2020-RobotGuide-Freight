@@ -7,11 +7,11 @@
 	<!-- Run the web application -->
 	<node pkg="turtlebot_web" type="run.sh" name="web_app" />
 
-	<!-- Destop coordinate Publisher -->
-	<node pkg="projet_fetch" type="get_and_send_desktop_to_reach.py" name="desktop_coord_publisher" />
+	<!-- Desktop data publisher -->
+	<node pkg="projet_fetch" type="web_desktop_data.py" name="get_desktop_data" />
 
-	<!-- Get desktop coord to supress -->
-	<node name="get_desktop_coord" pkg="projet_fetch" type="send_coord_desktop_to_supress.py" />
+	<!-- Supress desktop data-->
+	<node pkg="projet_fetch" type="web_desktop_erase.py" name="supress_desktop"/>
 
 	<!-- Ajouter ici les nodes de gestion du robot et d ouverture de rviz etc... --> 
 

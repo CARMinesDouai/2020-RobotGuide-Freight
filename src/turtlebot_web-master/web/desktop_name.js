@@ -1,3 +1,6 @@
+var new_desktop = false;
+var desktop_counter = 0;
+
 var Desktop = function (a) {
   var that  = this;
   this.ros  = a.ros;
@@ -42,20 +45,34 @@ var Desktop = function (a) {
 	      //console.log(data.desktop_list);
 	  var totalButtons = data.desktop_list.length;
 	  console.log(totalButtons);
-	  var navButtons = document.getElementById("nav-buttons");
-	  for (var b=0; b<totalButtons;b++){
-	  	  var button = document.createElement("button");
-		  console.log(button);
-		  button.setAttribute("value", that.desktop_list[b]);
-		  button.setAttribute("class", "btn");
-		  button.setAttribute("tyoe", "button");
-		  button.setAttribute("onclick", "desktop.setGoal(this)");
-		  //button.innerHTML="Desktop " + b;
-		  button.innerHTML= that.desktop_list[b];
-		  navButtons.appendChild(button);  
-		  };
+	  if (desktop_counter != totalButtons){
+		  desktop_counter = totalButtons;
+		  var navButtons = document.getElementById("nav-buttons");
+		  for (var b=0; b<totalButtons;b++){
+		  	  var button = document.createElement("button");
+			  console.log(button);
+			  button.setAttribute("value", that.desktop_list[b]);
+			  button.setAttribute("class", "btn");
+			  button.setAttribute("tyoe", "button");
+			  button.setAttribute("onclick", "desktop.setGoal(this)");
+			  //button.innerHTML="Desktop " + b;
+			  button.innerHTML= that.desktop_list[b];
+			  navButtons.appendChild(button);  
+			  };
+		  var optionsMenu = document.getElementById("monselect");
+		  for (var b=0; b<totalButtons;b++){
+		  	  var opt = document.createElement('option');
+			  opt.setAttribute("value", that.desktop_list[b]);
+			  opt.setAttribute("label", that.desktop_list[b]);
+			  //button.innerHTML="Desktop " + b;
+			  opt.innerHTML= that.desktop_list[b];
+			  optionsMenu.appendChild(opt); 
+			  };
+	 	 };
 	  desktop_name_list.unsubscribe();
 	  };
+
+	  
   desktop_name_list.subscribe(ma_fonction);
   };
 };

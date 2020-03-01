@@ -14,6 +14,7 @@
   <script type="text/javascript" src="status.js"></script>
   <script type="text/javascript" src="camera.js"></script>
   <script type="text/javascript" src="desktop_name.js"></script>
+  <script type="text/javascript" src="desktop_manager.js"></script>
   
 
 </head>
@@ -50,6 +51,16 @@
       <p class="header">Desktop manager</p>
       <div> Desktop name to add : </div>
       <button class="btn" type="button" onclick="viewerJs.setPose()">Pose Publish</button>
+	<form id="myForm">
+	  <label for="myName">Dites-moi votre nom :</label>
+	  <input id="myName" name="name" value="John">
+	  <input type="submit" value="Envoyer !">
+	</form>
+	  
+	<label for="monselect">Desktop to suppress : </label>
+	<select id="monselect"> 
+	</select>
+	<button id="Supress_selected" type="submit" value="Sup" onclick="desktop_toSup.supress(desktop_toSup)"> Supress ! </button>
       <!--<button class="btn" type="button" onclick="desktop.setGoal(this)" value="Hellow">Envoi d un nom de bureau</button>
       <button class="btn" type="button" onclick="desktop.getDesktopNames()">Recuperation de donnees</button>-->
     </div>
@@ -84,8 +95,6 @@
   });
 
   desktop.getDesktopNames();
-
-
   var map1 = new Map({
     ros : ros,
     continuous : true,
@@ -104,6 +113,11 @@
   });
   var status1 = new Status({
     ros : ros
+  });
+  var desktop_toSup = new desktop_sup({
+    ros : ros,
+    continuous : true,
+    showPath : true
   });
   </script>
 </body>
