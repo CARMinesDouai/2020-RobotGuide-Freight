@@ -65,7 +65,7 @@ Ajout de cette ligne en fin de fichier :
 Les launch files et leur utilisation  
 ==
 
-## Gestion des bureaux présents dans le bâtiment 
+## Gestion des bureaux présents dans le bâtiment via console 
 **Commande de lancement**  
 Par défaut, la map "Lahure.yaml" est ouverte :  
 ``` roslaunch projet_fetch desktop_manager.launch```  
@@ -117,7 +117,7 @@ Le départ du robot se fait toujours à la position où il apparait sur rviz et 
 A noter que sa position et son orientation est modifiable.  
 Une fois la commande roslaunch faite, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ.  
 
-## Déplacement du robot vers un point objectif depuis application web 
+## Application web 
 **Commande de lancement**  
 Web app et déplacement du robot sans évitement d'obstacles locaux :  
 ``` roslaunch projet_fetch move_to.launch avoid:="false" web_app:="true"```  
@@ -130,6 +130,8 @@ Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :
 Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous :  
 
 ![Bureaux joignables](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_web.png)  
+
+Possibilité de suppression des bureaux éxistants directement depuis l'interface web.
 
 Fonctionnement des launch files via rqt_graph
 ==
