@@ -10,7 +10,7 @@ Le fonctionnement du robot à l'aboutissement du projet est donc le suivant :
 
 - Un utilisateur doit pouvoir selectionner le bureau de la personne qu'il veut rejoindre sur une interface graphique (Sur une tablette par exemple).  
 - Le robot doit accompagner la personne au bureau demandé. Il doit donc prendre le chemin le plus efficace et s'arrêter une fois arrivé.  
-- Au cours du trajet, le robot doit être capable d'éviter des objets imprévus à l'origine (Comme une personne ou un carton par exemple, contrairement à un mur l'est dans le bâtiment).  
+- Au cours du trajet, le robot doit être capable d'éviter des objets imprévus à l'origine (Comme une personne ou un carton par exemple).  
 - Des capteur doivent permettre d'indiquer la présence de la personne supposée le suivre. Effectivement, le robot doit s'arrêter si la personne ne suit plus (Si elle s'arrête pour discutter avec une autre personne par exemple.)
 - Le robot doit éventuellement être capable de suivre une personne dans le batîment.
 
@@ -101,7 +101,8 @@ Quand la carte est complète, l'enregistrement de celle-ci est possible via la c
 
 **Visualisation**  
 La visualisation de la map en création est possible directement dans Rviz, déjà ouvert avec la commande de lancement.   
-<Image a inserer ici>
+
+![Mapping_rviz](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/mapping.png) 
 
 
 ## Déplacement du robot vers un point objectif depuis RVIZ
