@@ -118,6 +118,9 @@ Le départ du robot se fait toujours à la position où il apparait sur rviz et 
 A noter que sa position et son orientation est modifiable.  
 Une fois la commande roslaunch faite, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ.  
 
+![2D_navGoal](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/2D_navGoal.png)  
+![Path_planner](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/Path_planner.png) 
+
 ## Application web 
 **Commande de lancement**  
 Web app et déplacement du robot sans évitement d'obstacles locaux :  
