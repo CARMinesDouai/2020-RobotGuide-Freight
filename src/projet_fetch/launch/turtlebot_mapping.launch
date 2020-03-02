@@ -14,8 +14,8 @@
 	<!-- Lance le noeud qui permet la creation de la map a partir des donnees laser --> 
 	<node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
 		<!--On donne ici des parametres de distances max gardees sur les donnees laser pour la creation de map-->
-		<param name="maxURange" value="4.0"/>
-		<param name="map_update_interval" value="5.0"/>
+		<param name="maxURange" value="3.0"/>
+		<param name="map_update_interval" value="4.0"/>
 	</node> 
 	
 	<!--<arg name="map_name" default="default"/> 
