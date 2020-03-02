@@ -1,0 +1,34 @@
+Compte rendu du 02/03/20 - 10h30 : 
+
+Présentation du travail effectué dans la semaine :
+
+- Brique de déplacement du robot :
+	*Node Evitement d'obstacle ok
+	*Détermination du path et envoi de celui-ci à move_to ok
+	*Launch file de gestion des bureaux 
+	*Application web partiellement fonctionnelle
+	
+- Brique de vision : 
+	*Reconnaissance faciale : Algorithme fonctionnel mais rafraichissement peut être un peu lent -> essai d'utilisation de la NeuralStick afin d'améliorer la vitesse ( espace de travail OPENVINO)
+	-> Essai de mise en place d'un multipthreading afin d'améliorer la répartition de travail entre les CPUs
+	*Node:person_following : Ajout du calcul de distance de la personne avec la fonction getDistance de la librairie Pyrealsense 
+	*Reconnaissance de personne : Algorithme fonctionnel avec envoie des données de présence sur un topic 
+	*Tracking de la personne : Longe les obstacles si besoin lors des virages et recherche de la personne lors de la perte de visu sur celle-ci
+
+Remarques sur le travail et objectifs à venir : 
+
+- Brique de déplacement du robot : 
+	*Afficher la carte enregistrée sur l'application Web et non plus le mapping
+	*Arreter gestion des bureaux via l'interface web
+	*Récupérer les différents RQT_GRAPH
+
+- Brique de vision : 
+	*Limiter le nombre d'images à gérer pour la reconnaissance faciale
+	*Reconnaissance d'une seule personne pour le tracking
+
+- Documentation
+	*Expliquer les différents axes de recherche
+	*Documenter l'ensemble des scripts fonctionnels
+	*Définir les différents axes d'amélioration
+- Démo:
+	*scénariser la démo 
