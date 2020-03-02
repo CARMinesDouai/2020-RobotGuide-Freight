@@ -45,6 +45,7 @@ def rewrite(desktop_coord):
 
 def Add(data):
 	global first_point
+	string_length = ""
 	desktop_coord=[0,0]
 	desktop_coord[0] = data.point.x
 	desktop_coord[1] = data.point.y
@@ -62,21 +63,35 @@ def gestions_chiffres_significatifs( desktop_coord ) :
 		if desktop_coord[k] < 0 :
 			#Gestion du nombre de chiffre dans le nombre recupere
 			if desktop_coord[k] > -10.0 :
-				desktop_coord[k]= round(desktop_coord[k],2)
-				desktop_coord[k] = desktop_coord[k] + 0.01
+				string_length = str(round(desktop_coord[k],2))
+				if len(string_length) < 5 : 
+					desktop_coord[k] = round(desktop_coord[k],2) + 0.01
+				else : 
+					desktop_coord[k] = round(desktop_coord[k],2)
 			elif desktop_coord[k] > -100.0 and desktop_coord[k]< -10.0 :
-				desktop_coord[k]= round(desktop_coord[k],1)
+					string_length = str(round(desktop_coord[k],1))
+				if len(string_length) < 5 : 
+					desktop_coord[k] = round(desktop_coord[k],1) + 0.1
+				else : 
+					desktop_coord[k] = round(desktop_coord[k],1)
 			else : 	
 				desktop_coord[k] = round(desktop_coord[k],0)
 		
 		else :
 			#Meme gestion pour un nombre positif 
 			if desktop_coord[k] < 10.0 :
-				desktop_coord[k] = round(desktop_coord[k],3)
-				desktop_coord[k] = desktop_coord[k] + 0.001
+				string_length = str(round(desktop_coord[k],3))
+				if len(string_length) < 5 : 
+					desktop_coord[k] = round(desktop_coord[k],3) + 0.001
+				else : 
+					desktop_coord[k] = round(desktop_coord[k],3)
+				
 			elif desktop_coord[k] >= 10.0 and desktop_coord[k] < 100.0 : 
-				desktop_coord[k] = round(desktop_coord[k],2)
-				desktop_coord[k] = desktop_coord[k] + 0.01
+				string_length = str(round(desktop_coord[k],2))
+				if len(string_length) < 5 : 
+					desktop_coord[k] = round(desktop_coord[k],2) + 0.01
+				else : 
+					desktop_coord[k] = round(desktop_coord[k],2)
 			else : 
 				desktop_coord[k] = round(desktop_coord[k],1)
 	return(desktop_coord)		

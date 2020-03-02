@@ -41,6 +41,8 @@
 	</group>
 
 	<group if="$(arg web_app)">
+		<!-- websocket -->
+		<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
 
 		<!-- Desktop name Publisher -->
 		<node pkg="projet_fetch" type="desktop_name_publisher.py" name="desktop_name_publisher"/>

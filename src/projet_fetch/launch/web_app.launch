@@ -14,5 +14,6 @@
 	<node pkg="projet_fetch" type="web_desktop_erase.py" name="supress_desktop"/>
 
 	<!-- Ajouter ici les nodes de gestion du robot et d ouverture de rviz etc... --> 
+	<node pkg="projet_fetch" type="get_and_send_desktop_to_reach.py" name="send_data_for_path"/>
 
 </launch>

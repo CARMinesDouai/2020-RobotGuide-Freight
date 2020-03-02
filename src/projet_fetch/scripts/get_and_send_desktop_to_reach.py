@@ -28,6 +28,7 @@ def get_desktop_goal(data) :
 				print("Line strip coordinate : " + line.strip())
 				print(line.strip()[1:6],line.strip()[7:12])
 				desktop.pose.position.x, desktop.pose.position.y = float(line.strip()[1:6]), float(line.strip()[7:12])
+				desktop.pose.orientation.w = 0.001
 				print(desktop)
 				#Publish desktop coordinates as a PoseStamped in /move_base_simple/goal, topic which calculate the shortest path
 				desktop_to_reach_coord_pub.publish(desktop)
