@@ -236,6 +236,17 @@ Cette node permet la reconnaissance faciale de la personne qui suit le robot:
 - Elle renvoie un message ROS constitué de 2 variables (1 bool et 1 int) donnant la présence ou non d'une personne et la distance à laquelle se trouve la personne.  
 - La reconnaissance faciale est basée sur du deep learning, des modéles pre-entrainés provenant de la bibliothéque dlib sont utilisés afin de reconnaitre les visages des personnes selon la forme de leur visage.  
 
+**Piste réflexion amélioration node person_following**
+
+Amélioration vitesse reconnaissance faciale :
+- Utilisation de la neural stick : installation et utilisation de l'espace de travail OpenVino (probléme de version)
+- Reflexion sur l'utilisation du multithreading afin de partager les différentes tâches ( difficile à adapter à la reconnaissance faciale)
+- Evaluation de la distance de la personne, utilisation du cadre de reconnaissance et de la fonction de la librairie Pyrealsense2 ( getDistance())
+
+Amélioration évaluation distance person_tracking:
+- Utilisation de la fonction getDistance() de la librairie Pyrealsense2 mais non fonctionnel
+
+
 Vidéo de présentation du projet :
 ==
 Voies d'amélioration du projet :
