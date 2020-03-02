@@ -14,6 +14,7 @@ import ntpath
 import rospy
 import pyrealsense2 as rs
 import numpy as np
+import rospkg
 from person_following.msg import person_presence
 
 top=0
@@ -24,17 +25,16 @@ dist_total_average=0
 person_pres=person_presence()
 person_pres.Distance=0
 person_pres.Presence=False
+increment=0
 
 
-parser = argparse.ArgumentParser(description='Easy Facial Recognition App')
-parser.add_argument('-i', '--input', type=str, required=True, help='directory of input known faces')
-
-
+rospack = rospkg.RosPack()
+packagePath=rospack.get_path('person_following')
 print('[INFO] Starting System...')
 print('[INFO] Importing pretrained model..')
-pose_predictor_68_point = dlib.shape_predictor("pretrained_model/shape_predictor_68_face_landmarks.dat")
-pose_predictor_5_point = dlib.shape_predictor("pretrained_model/shape_predictor_5_face_landmarks.dat")
-face_encoder = dlib.face_recognition_model_v1("pretrained_model/dlib_face_recognition_resnet_model_v1.dat")
+pose_predictor_68_point = dlib.shape_predictor(str(packagePath)+"/scripts/pretrained_model/shape_predictor_68_face_landmarks.dat")
+pose_predictor_5_point = dlib.shape_predictor(str(packagePath)+"/scripts/pretrained_model/shape_predictor_5_face_landmarks.dat")
+face_encoder = dlib.face_recognition_model_v1(str(packagePath)+"/scripts/pretrained_model/dlib_face_recognition_resnet_model_v1.dat")
 face_detector = dlib.get_frontal_face_detector()
 face_recon = False
 print('[INFO] Importing pretrained model..')
@@ -54,7 +54,7 @@ def encode_face(image):
     landmarks_list=[]
     for face_location in face_locations:
         # DETECT FACES
-        shape = pose_predictor_5_point(image, face_location)
+        shape = pose_predictor_68_point(image, face_location)
         face_encodings_list.append(np.array(face_encoder.compute_face_descriptor(image, shape, num_jitters=1)))
         # GET LANDMARKS
         shape = face_utils.shape_to_np(shape)
@@ -64,12 +64,17 @@ def encode_face(image):
 
 
 def easy_face_reco(frame, known_face_encodings, known_face_names):
+    global increment
     global top
     global bottom
     global right
     global left
     global person_pres
     global dist_total_average
+    top=0
+    left=0
+    right=0
+    bottom=0
     rgb_small_frame = frame[:, :, ::-1]
     # ENCODING FACE
     face_encodings_list, face_locations_list, landmarks_list = encode_face(rgb_small_frame)
@@ -95,62 +100,52 @@ def easy_face_reco(frame, known_face_encodings, known_face_names):
             person_pres.Presence=False
             name = "Unknown"
             face_names.append(name)
-
     for (top, right, bottom, left), name in zip(face_locations_list, face_names):
-        cv2.rectangle(frame, (left+50, top+50), (right-50, bottom-50), (0, 255, 0), 2)
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         cv2.rectangle(frame, (left, bottom - 30), (right, bottom), (0, 255, 0), cv2.FILLED)
         cv2.putText(frame, name, (left + 2, bottom - 2), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 1)
 
-    dist_line=0
-"""   for shape in landmarks_list:
-        for (x, y) in shape:
-            cv2.circle(frame, (x, y), 1, (255, 0, 255), -1)
-            dist_line+=depth_frame.get_distance(x,y)
-            print("dist_line="+str(depth_frame.get_distance(x,y)))
-    dist_total_average=dist_line/68"""
-
 def distance_person(depth_frame):
-	global left
-	global right  
-	global top
-	global bottom
 	global person_pres
+	global top
+	global left
+	global right
+	global bottom
 	dist_total_average=0
 	dist_total=0
 	top=top+50
 	bottom=bottom-50
 	left=left+50
 	right=right-50
-        #if top>0 and bottom<480 and left>0 and right!=0 and right<640 and bottom!=0:
+	print("top="+str(top))
+	print("bottom="+str(bottom))
+	print("left="+str(left))
+	print("right="+str(right))
 	for height in range (top,bottom):
+                print("bonjour")
                 divided=0
                 dist_line=0
                 for width in range(left,right):
-                        if depth_frame.get_distance(width,height)>0 and depth_frame.get_distance(width,height)<1:                               
+                        if depth_frame.get_distance(width,height)>0 and depth_frame.get_distance(width,height)<3:                               
                                 dist_line+=depth_frame.get_distance(width,height) 
-                                print("get_distance="+str(depth_frame.get_distance(width,height)))
-                                print("dist_line="+str(dist_line))
                                 divided+=1
-                print("divided="+str(divided))
+                                print("dist_line="+str(dist_line))
                 if divided!=0:
                         dist_total+=dist_line/(divided)
-                        print("average_dist_line="+str(dist_line/divided))
-                        print("dist_total="+str(dist_total))
-                
-	dist_total_average=(dist_total/(bottom-top))
-        #person_pres.Distance=dist_total_average
-	print("dist_total_average="+str(dist_total_average))
-	print("fin calcul")
+        
+	dist_total_average=100*(dist_total/(bottom-top))
+	person_pres.Distance=int(dist_total_average)
+	print("dist="+str(dist_total_average))
 	return dist_total_average
 
 	
 
 if __name__ == '__main__':
     rospy.init_node("facial_recognition",anonymous=True)
-    args = parser.parse_args()
     _cmd_pub=rospy.Publisher("/person_following",person_presence,queue_size=1)
     print('[INFO] Importing faces...')
-    face_to_encode_path = Path(args.input)
+    known_faces_path=str(packagePath)+"/scripts/known_faces/"
+    face_to_encode_path = Path(known_faces_path)
     files = [file_ for file_ in face_to_encode_path.rglob('*.jpg')]
 
     for file_ in face_to_encode_path.rglob('*.png'):
@@ -179,19 +174,14 @@ if __name__ == '__main__':
         depth_frame = frames.get_depth_frame().as_depth_frame()
         color_frame = frames.get_color_frame()
         color_image = np.asanyarray(color_frame.get_data())
-        """gray = cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY)
-        gray = cv2.GaussianBlur(gray, (5, 5), 0)
-        edged = cv2.Canny(gray, 35, 125)
-        # find the contours in the edged image and keep the largest one;
-        # we'll assume that this is our piece of paper in the image
-        cv2.imshow('frame',edged)"""
         easy_face_reco(color_image, known_face_encodings, known_face_names)
         dist_total_average=distance_person(depth_frame)
+        increment+=1
         cv2.imshow('Easy Facial Recognition App', color_image)
-        #_cmd_pub.publish(person_pres)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        _cmd_pub.publish(person_pres)
+        person_pres.Presence=False
+        if cv2.waitKey(1) == ord('q'):
             break
     print('[INFO] Stopping System')
     pipeline.stop()
-    video_capture.release()
-    cv2.destroyAllWindows() 
+    cv2.destroyAllWindows()
