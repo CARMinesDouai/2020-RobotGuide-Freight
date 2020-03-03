@@ -56,6 +56,7 @@ find_package(catkin REQUIRED COMPONENTS
    desktop.msg
    new_goal.msg
    emergency.msg
+   person_presence.msg
 #   Message2.msg
  )
 

@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 # Code Anis - Defend Intelligence
+import sys
+sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+
 import cv2
 import dlib
 import PIL.Image
 import numpy as np
-from std_msgs.msg import Bool
 from imutils import face_utils
 import imutils
 import argparse
 from pathlib import Path
 import os
 import ntpath
-import rospy
 import pyrealsense2 as rs
 import numpy as np
+sys.path.insert(0, '/opt/ros/kinetic/lib/python2.7/dist-packages')
+import rospy
 import rospkg
-from person_following.msg import person_presence
+from projet_fetch.msg import person_presence
+
 
 top=0
 left=0
@@ -150,7 +154,8 @@ if __name__ == '__main__':
         files.append(file_)
     if len(files)==0:
         raise ValueError('No faces detect in the directory: {}'.format(face_to_encode_path))
-    known_face_names = [os.path.splitext(ntpath.basename(file_))[0] for file_ in files]
+    #known_face_names = [os.path.splitext(ntpath.basename(file_))[0] for file_ in files]
+    known_face_names = ["Pierre" , "Paul" ]
 
     known_face_encodings = []
     for file_ in files:
