@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
 # Code Anis - Defend Intelligence
-import sys
-sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-
 import cv2
 import dlib
 import PIL.Image
 import numpy as np
+from std_msgs.msg import Bool
 from imutils import face_utils
 import imutils
 import argparse
 from pathlib import Path
 import os
 import ntpath
+import rospy
 import pyrealsense2 as rs
 import numpy as np
-sys.path.insert(0, '/opt/ros/kinetic/lib/python2.7/dist-packages')
-import rospy
 import rospkg
-from projet_fetch.msg import person_presence
+from person_following.msg import person_presence
 
-name=""
 top=0
 left=0
 right=0
@@ -80,7 +76,6 @@ def easy_face_reco(frame, known_face_encodings, known_face_names):
     global left
     global person_pres
     global dist_total_average
-    global name
     top=0
     left=0
     right=0
@@ -107,7 +102,6 @@ def easy_face_reco(frame, known_face_encodings, known_face_names):
             face_recon = True
             person_pres.Presence=True
         else:
-            person_pres.Presence=False
             name = "Unknown"
         face_names.append(name)
     for (top, right, bottom, left), name in zip(face_locations_list, face_names):
@@ -156,7 +150,6 @@ if __name__ == '__main__':
     if len(files)==0:
         raise ValueError('No faces detect in the directory: {}'.format(face_to_encode_path))
     known_face_names = [os.path.splitext(ntpath.basename(file_))[0] for file_ in files]
-    known_face_names = ["Pierre" , "Paul" ]
 
     known_face_encodings = []
     for file_ in files:
@@ -181,15 +174,12 @@ if __name__ == '__main__':
         #dist_total_average=distance_person(depth_frame)
         #increment+=1
         cv2.imshow('Easy Facial Recognition App', color_image)
-        if coord_faces[0][0]==0 or name=="unknown":
+        if coord_faces[0][0]==0 or name=="Unknown":
             counter_missing+=1
         else:
             counter_missing=0
-        if counter_missing>10:
+        if counter_missing>20:
             person_pres.Presence=False
-        """print(coord_faces[0][0])
-        print("counter="+str(counter_missing))
-        print("presence="+str(person_pres.Presence))"""
         _cmd_pub.publish(person_pres)
         if cv2.waitKey(1) == ord('q'):
             break
