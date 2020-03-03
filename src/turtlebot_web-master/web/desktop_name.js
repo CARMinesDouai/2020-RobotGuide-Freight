@@ -15,21 +15,24 @@ var Desktop = function (a) {
 
 
   this.setGoal = function (desktop_clicked) {
-    //console.log(JSON.stringify(desktop_clicked.value));
-    
     var deskName = new ROSLIB.Topic({
       ros : ros,
       name : '/desktop_to_reach_name',
       messageType : 'projet_fetch/desktop_name'
     });
+    var newGoal_pub = new ROSLIB.Topic({
+      ros : ros,
+      name : '/new_goal',
+      messageType : 'projet_fetch/new_goal'
+    });
+    var newgoal = new ROSLIB.Message({
+	goal: true
+    });
     var desktopToReach = new ROSLIB.Message({
-	//desktop_name: 'desktop_clicked'
 	desktop_name: desktop_clicked.value
     });
-    console.log(desktop_clicked);
-    for (var a=0; a<10; a++) {
-    	deskName.publish(desktopToReach);
-    };
+    deskName.publish(desktopToReach);
+    newGoal_pub.publish(newgoal);
   };
 
   this.getDesktopNames = function (){

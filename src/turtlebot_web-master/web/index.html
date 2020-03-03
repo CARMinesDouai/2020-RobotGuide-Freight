@@ -49,10 +49,9 @@
     </div>
     <div class="desktop_handler">
       <p class="header">Desktop manager</p>
-      <div> Desktop name to add : </div>
       <button class="btn" type="button" onclick="viewerJs.setPose()">Pose Publish</button>
 	<form id="myForm">
-	  <label for="myName">Dites-moi votre nom :</label>
+	  <label for="myName">Nom du bureau : </label>
 	  <input id="myName" name="name" value="John">
 	  <input type="submit" value="Envoyer !">
 	</form>
@@ -88,13 +87,6 @@
   ros.on('close', function() {
     console.log('Connection to websocket server closed.');
   });
-  var desktop = new Desktop({
-    ros : ros,
-    continuous : true,
-    showPath : true
-  });
-
-  desktop.getDesktopNames();
   var map1 = new Map({
     ros : ros,
     continuous : true,
@@ -114,6 +106,12 @@
   var status1 = new Status({
     ros : ros
   });
+  var desktop = new Desktop({
+    ros : ros,
+    continuous : true,
+    showPath : true
+  });
+  desktop.getDesktopNames();
   var desktop_toSup = new desktop_sup({
     ros : ros,
     continuous : true,

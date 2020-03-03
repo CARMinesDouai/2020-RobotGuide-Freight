@@ -31,7 +31,7 @@ Configuration de l'environnement :
 
 **Prérequis d'utilisation :**  
 Il est nécéssaire d'être sous kinetic pour le bon fonctionnement des parties à suivre.  
-Le tutoriel pour le Turtlebot Bringup doit avoir été complété.   
+Le tutoriel pour le Turtlebot Bringup doit avoir été complété.  
 
 **Configuration du bashrc :**  
 Ouverture du fichier :  
@@ -45,9 +45,13 @@ Ajout de cette ligne en fin de fichier :
  ```sudo apt install ros-kinetic-web-video-server```  
 
 **Installation du projet :**  
-```cd <catkin_repo>/src```  
-*Attention à la ligne suivante, il faudra uniquement y mettre ce qui est éxistant dans 2020-robot-guide/src (voir pour la création d'un ZIP ou juste faire une commande pour lier le dossier au bon endroit)*  
+```cd```  
 ```git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```  
+Ajout des liens symboliques dans catkin :  
+```cd <catkin_repo>/src```  
+```ln -s <2020-RobotGuide-Freight>/src/person_following/```  
+```ln -s <2020-RobotGuide-Freight>/src/projet_fetch/```  
+```ln -s <2020-RobotGuide-Freight>/src/turtlebot_web-master/```  
 
 
 #### A mettre dans les annexes
