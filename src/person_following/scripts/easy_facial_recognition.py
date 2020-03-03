@@ -26,6 +26,9 @@ person_pres=person_presence()
 person_pres.Distance=0
 person_pres.Presence=False
 increment=0
+counter_missing=0
+face_locations=0
+coord_faces = [(0,0,0,0)]
 
 
 rospack = rospkg.RosPack()
@@ -41,14 +44,16 @@ print('[INFO] Importing pretrained model..')
 
 
 def transform(image, face_locations):
-    coord_faces = []
+    global coord_faces
+    coord_faces = [(0,0,0,0)]
     for face in face_locations:
         rect = face.top(), face.right(), face.bottom(), face.left()
         coord_face = max(rect[0], 0), min(rect[1], image.shape[1]), min(rect[2], image.shape[0]), max(rect[3], 0)
-        coord_faces.append(coord_face)
+        coord_faces[0]=coord_face
     return coord_faces
 
 def encode_face(image):
+    global face_locations
     face_locations = face_detector(image, 1)
     face_encodings_list = []
     landmarks_list=[]
@@ -99,7 +104,7 @@ def easy_face_reco(frame, known_face_encodings, known_face_names):
         else:
             person_pres.Presence=False
             name = "Unknown"
-            face_names.append(name)
+        face_names.append(name)
     for (top, right, bottom, left), name in zip(face_locations_list, face_names):
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
         cv2.rectangle(frame, (left, bottom - 30), (right, bottom), (0, 255, 0), cv2.FILLED)
@@ -117,25 +122,18 @@ def distance_person(depth_frame):
 	bottom=bottom-50
 	left=left+50
 	right=right-50
-	print("top="+str(top))
-	print("bottom="+str(bottom))
-	print("left="+str(left))
-	print("right="+str(right))
 	for height in range (top,bottom):
-                print("bonjour")
                 divided=0
                 dist_line=0
                 for width in range(left,right):
                         if depth_frame.get_distance(width,height)>0 and depth_frame.get_distance(width,height)<3:                               
                                 dist_line+=depth_frame.get_distance(width,height) 
                                 divided+=1
-                                print("dist_line="+str(dist_line))
                 if divided!=0:
                         dist_total+=dist_line/(divided)
         
 	dist_total_average=100*(dist_total/(bottom-top))
 	person_pres.Distance=int(dist_total_average)
-	print("dist="+str(dist_total_average))
 	return dist_total_average
 
 	
@@ -163,7 +161,6 @@ if __name__ == '__main__':
 
     print('[INFO] Faces well imported')
     print('[INFO] Starting Webcam...')
-    #video_capture = cv2.VideoCapture(3)
     pipeline = rs.pipeline()
     pipeline.start()
     print('[INFO] Webcam well started')
@@ -175,11 +172,19 @@ if __name__ == '__main__':
         color_frame = frames.get_color_frame()
         color_image = np.asanyarray(color_frame.get_data())
         easy_face_reco(color_image, known_face_encodings, known_face_names)
-        dist_total_average=distance_person(depth_frame)
-        increment+=1
+        #dist_total_average=distance_person(depth_frame)
+        #increment+=1
         cv2.imshow('Easy Facial Recognition App', color_image)
+        if coord_faces[0][0]==0 or person_pres.Presence==False:
+            counter_missing+=1
+        else:
+            counter_missing=0
+        if counter_missing>10:
+            person_pres.Presence=False
+        """print(coord_faces[0][0])
+        print("counter="+str(counter_missing))
+        print("presence="+str(person_pres.Presence))"""
         _cmd_pub.publish(person_pres)
-        person_pres.Presence=False
         if cv2.waitKey(1) == ord('q'):
             break
     print('[INFO] Stopping System')
