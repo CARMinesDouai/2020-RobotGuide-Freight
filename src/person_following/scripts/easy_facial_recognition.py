@@ -20,7 +20,7 @@ import rospy
 import rospkg
 from projet_fetch.msg import person_presence
 
-
+name=""
 top=0
 left=0
 right=0
@@ -80,6 +80,7 @@ def easy_face_reco(frame, known_face_encodings, known_face_names):
     global left
     global person_pres
     global dist_total_average
+    global name
     top=0
     left=0
     right=0
@@ -154,7 +155,7 @@ if __name__ == '__main__':
         files.append(file_)
     if len(files)==0:
         raise ValueError('No faces detect in the directory: {}'.format(face_to_encode_path))
-    #known_face_names = [os.path.splitext(ntpath.basename(file_))[0] for file_ in files]
+    known_face_names = [os.path.splitext(ntpath.basename(file_))[0] for file_ in files]
     known_face_names = ["Pierre" , "Paul" ]
 
     known_face_encodings = []
@@ -180,7 +181,7 @@ if __name__ == '__main__':
         #dist_total_average=distance_person(depth_frame)
         #increment+=1
         cv2.imshow('Easy Facial Recognition App', color_image)
-        if coord_faces[0][0]==0 or person_pres.Presence==False:
+        if coord_faces[0][0]==0 or name=="unknown":
             counter_missing+=1
         else:
             counter_missing=0
