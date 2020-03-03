@@ -69,7 +69,7 @@ def gestions_chiffres_significatifs( desktop_coord ) :
 				else : 
 					desktop_coord[k] = round(desktop_coord[k],2)
 			elif desktop_coord[k] > -100.0 and desktop_coord[k]< -10.0 :
-					string_length = str(round(desktop_coord[k],1))
+				string_length = str(round(desktop_coord[k],1))
 				if len(string_length) < 5 : 
 					desktop_coord[k] = round(desktop_coord[k],1) + 0.1
 				else : 

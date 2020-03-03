@@ -8,6 +8,7 @@ from geometry_msgs.msg import PoseStamped, Twist, PointStamped
 from sensor_msgs.msg import Imu
 from tf2_msgs.msg import TFMessage
 from sensor_msgs.msg import LaserScan
+from projet_fetch.msg import emergency
 
 # Initialize ROS::node
 rospy.init_node('Local_avoidance', anonymous=True)
@@ -34,8 +35,7 @@ _cmd_frame_id= node_parameter('cmd_frame_id', 'base_link')
 def angle_to_add_function():
 	global first_orientation 
 	global angle_to_add
-	if rospy.has_param("orientation_done"):
-		if rospy.get_param("orientation_done") or first_orientation  : 
+	if rospy.has_param("orientation_done") or first_orientation:
 			angle_avoidance_function()
 	angle_decrementation()
 	rospy.set_param("angle_to_add", angle_to_add)
@@ -130,7 +130,7 @@ def angle_avoidance_function():
 		#if abs(left_angle_to_add + right_angle_to_add) < 30 and left_angle_to_add != 0 and right_angle_to_add != 0 : 
 			print("left mean : " + str(left_mean_obj_dist))
 			print("right mean : " + str(right_mean_obj_dist))
-			if left_min_dist > 0.3 and right_min_dist > 0.3 :
+			if left_min_dist > 0.15 and right_min_dist > 0.15 :
 				if right_mean_obj_dist < left_mean_obj_dist :
 					print("Selection du cote de rotation gauche")
 					angle_to_add = right_angle_to_add
@@ -173,7 +173,7 @@ def ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin):
 	#vitesse angulaire variant entre *1 et *2 
 	Int_angular = (2.0-1.0)/10
 	test = False 
-	#linear, angular = rospy.get_param("cmd_vel_actual")[0], rospy.get_param("cmd_vel_actual")[1]
+
 	linear, angular = 0, 0 
 	if rospy.has_param("cmd_vel_init"):
 		for k in range(10): 
@@ -193,7 +193,7 @@ def ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin):
 
 if __name__ == '__main__':
 	print("Start get scan")	
-
+	rospy.Publisher('/emergency_stop', emergency, queue_size=1)
 	# Get laser data
 	rospy.Subscriber('/scan', LaserScan, laser_data)
 	

@@ -17,10 +17,5 @@
 	<!-- Get desktop coord to supress -->
 	<node name="get_desktop_coord" pkg="projet_fetch" type="send_coord_desktop_to_supress.py" />
 
-<!--
-<group if="$(arg avoid)">
-  stuff that will only be evaluated if foo is true 
-</group>
--->
 </launch>
 

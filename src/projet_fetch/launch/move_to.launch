@@ -3,6 +3,7 @@
 	<!-- Parametres de lancement -->
 	<arg name="avoid" default="true"/>
 	<arg name="web_app" default="true"/>
+	<arg name="follower" default="true"/>
 
 	<!-- Connection au robot --> 
 	<include file="$(find turtlebot_bringup)/launch/minimal.launch" />
@@ -15,7 +16,7 @@
 
 	  <!-- Map server -->
 	  <!--<arg name="map_file" default="$(env TURTLEBOT_MAP_FILE)"/> -->
-	  <arg name="map_file" default="/home/bot/catkin_ws/src/projet_fetch/map/Lahure.yaml"/>
+	  <arg name="map_file" default="/home/bot/catkin_ws/src/projet_fetch/map/rosbag_map.yaml"/>
 	  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
 	  <!-- AMCL (Position du robot dans la map et quelques parametres) -->
@@ -33,7 +34,7 @@
   	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find projet_fetch)/rviz/navigation.rviz"/>
 
 	<!-- Node de gestion de la vitesse avec recuperation des points objectifs -->
-	<node name="move_to" pkg="projet_fetch" type="move_to.py"  />
+	<node name="move_to" pkg="projet_fetch" type="move_to.py" output="screen"  />
 
 	<!-- Node de gestion des obstacles locaux => Peut etre active ou non -->
 	<group if="$(arg avoid)">
@@ -43,6 +44,9 @@
 	<group if="$(arg web_app)">
 		<!-- websocket -->
 		<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+
+		<!-- robot pose pub -->
+		<node pkg="robot_pose_publisher" type="robot_pose_publisher" name="robot_pose_publisher"/>
 
 		<!-- Desktop name Publisher -->
 		<node pkg="projet_fetch" type="desktop_name_publisher.py" name="desktop_name_publisher"/>
@@ -55,8 +59,11 @@
 
 		<!-- Supress desktop data-->
 		<node pkg="projet_fetch" type="web_desktop_erase.py" name="supress_desktop"/>
-
-	</group>	
+	</group>
 	
+	<!-- Node de reconnaissance faciale pour indiquer si la personne suit bien ou non le robot --> 
+	<group if="$(arg follower)">
+		<node name="person_following" pkg="person_following" type="person_following.py"  />
+	</group>	
 </launch>
 
