@@ -1,0 +1,1 @@
+bool take_capture

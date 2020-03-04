@@ -35,6 +35,22 @@ var Desktop = function (a) {
     newGoal_pub.publish(newgoal);
   };
 
+  this.capture = function(){
+    var capt_pub = new ROSLIB.Topic({
+      ros : ros,
+      name : '/face_capture',
+      messageType : 'projet_fetch/capture'
+    });
+    var capt = new ROSLIB.Message({
+	take_capture: true
+    });
+    capt_pub.publish(capt);
+  };
+  
+  this.stop = function(){
+    var coucou = 0
+  };
+
   this.getDesktopNames = function (){
     var desktop_name_list = new ROSLIB.Topic({
       ros : that.ros,
@@ -62,7 +78,7 @@ var Desktop = function (a) {
 			  button.innerHTML= that.desktop_list[b];
 			  navButtons.appendChild(button);  
 			  };
-		  var optionsMenu = document.getElementById("monselect");
+		/*  var optionsMenu = document.getElementById("monselect");
 		  for (var b=0; b<totalButtons;b++){
 		  	  var opt = document.createElement('option');
 			  opt.setAttribute("value", that.desktop_list[b]);
@@ -70,7 +86,7 @@ var Desktop = function (a) {
 			  //button.innerHTML="Desktop " + b;
 			  opt.innerHTML= that.desktop_list[b];
 			  optionsMenu.appendChild(opt); 
-			  };
+			  };*/
 	 	 };
 	  desktop_name_list.unsubscribe();
 	  };
@@ -78,5 +94,6 @@ var Desktop = function (a) {
 	  
   desktop_name_list.subscribe(ma_fonction);
   };
+
 };
 
