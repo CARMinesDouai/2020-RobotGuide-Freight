@@ -2,12 +2,12 @@
 import math, rospy
 import tf
 import time
-from math import atan2, sqrt, degrees
+from math import atan2, sqrt, degrees, atan
 from tf.transformations import euler_from_quaternion
 from geometry_msgs.msg import PoseStamped, PoseArray, Twist, PointStamped
 from sensor_msgs.msg import Imu
 from nav_msgs.msg import Path
-from projet_fetch.msg import new_goal, emergency
+from projet_fetch.msg import new_goal, emergency, person_presence
 
 #/move_base/DWAPlannerROS/global_plan
 
@@ -64,7 +64,7 @@ def stop_robot(data) :
 
 def wait_for_follower(data):
 	global follower_presence
-	#follower_presence = data.Presence
+	follower_presence = data.Presence
 	
 #Recuperation du path a suivre 
 def getting_path(data):
@@ -101,41 +101,46 @@ def movement_manager():
 	global last_goal_reached
 	global reached_point
 	global follower_presence
-	
+	#print("follower_presence : " + str(follower_presence))
+	add_angle = 0 
+	aim_angle_init = 0
+	angle_to_reach = 0
 	if reached_point < real_number_of_point_to_reach and not last_goal_reached : 
 		vel_msg = Twist()
 		pt_goal_base_link = point_goal_in_base_link(reached_point) 
-		print("Number of points to reach : " + str(real_number_of_point_to_reach))
-		print("reached point : " + str(reached_point))
+		#print("Number of points to reach : " + str(real_number_of_point_to_reach))
+		#print("reached point : " + str(reached_point))
 		dist = sqrt(pt_goal_base_link.point.x**2 + pt_goal_base_link.point.y**2)
-		print(" Aim point distance : " + str(dist))
-		angle_to_reach, orientation_done = aim_angle_to_reach(pt_goal_base_link)
+		#print(" Aim point distance : " + str(dist))
+		angle_to_reach, orientation_done = aim_angle_to_reach(pt_goal_base_link, angle_to_reach)
 		rospy.set_param("orientation_done", orientation_done)
 		print(" ")
 		print("Angle to reach without avoid : " + str(angle_to_reach))
+		aim_angle_init = angle_to_reach
 		#print("vel_msg.linear.x : " + str(vel_msg.linear.x) + " vel_msg.angular : " + str(vel_msg.angular.z))
-		angle_to_reach = angle_correction_for_local_avoid(angle_to_reach)
+		angle_to_reach, add_angle = angle_correction_for_local_avoid(angle_to_reach, add_angle)
 		print("Angle to reach with avoid : " + str(angle_to_reach))
 		#Orientation vers le point objectif 
-		orientation(angle_to_reach, vel_msg) 
+		orientation(angle_to_reach, vel_msg, add_angle, aim_angle_init) 
 
 		#Deplacement jusqu'a l objectif
 		move_forward(pt_goal_base_link, vel_msg, orientation_done, dist)
-		print("vel_msg.linear.x : " + str(vel_msg.linear.x) + " vel_msg.angular : " + str(vel_msg.angular.z))
+		#print("vel_msg.linear.x : " + str(vel_msg.linear.x) + " vel_msg.angular : " + str(vel_msg.angular.z))
 
 		#Correction de vitesse lors de l approche d un obstacle	si rotation ok 
 		velocity_correction_for_local_avoid(vel_msg)
-		print("AFTER CORRECT AVOID vel linear : " + str(vel_msg.linear.x) + " vel angular : " + str(vel_msg.angular.z))	
-
+		#print("AFTER CORRECT AVOID vel linear : " + str(vel_msg.linear.x) + " vel angular : " + str(vel_msg.angular.z))	
+		print("Vel message : " + str(vel_msg) )
 		#On verifie que la personne suit bien le robot
 		if follower_presence : 
 			#Publication de la commande de vitesse 
 			vel_pub.publish(vel_msg)
 	
-def angle_correction_for_local_avoid(angle_to_reach): 
+def angle_correction_for_local_avoid(angle_to_reach, add_angle): 
 	if rospy.has_param('angle_to_add') and not first_orientation : 
 		angle_to_reach = angle_to_reach + rospy.get_param('angle_to_add')
-	return(angle_to_reach)
+		add_angle = rospy.get_param('angle_to_add')
+	return(angle_to_reach, add_angle)
 
 
 def velocity_correction_for_local_avoid( vel_msg):
@@ -155,30 +160,41 @@ def point_goal_in_base_link(reached_point):
 	
 
 
-def aim_angle_to_reach(pt_goal_base_link):
+def aim_angle_to_reach(pt_goal_base_link, angle_to_reach):
 	goal_angle=[pt_goal_base_link.point.x, pt_goal_base_link.point.y]
 	orientation_done = False 
 	#Angle de rotation qu il faut dans base_footprint pour aller a l objectif
 	if goal_angle[1] < 0 and goal_angle[0] < 0: 
-		aim_angle = degrees(atan2(goal_angle[1], goal_angle[0])) - 180
+		angle_to_reach = degrees(atan(goal_angle[1]/ goal_angle[0])) - 180
 	elif goal_angle[1] > 0 and  goal_angle[0] < 0 :
-		aim_angle = 180 - degrees(atan2( goal_angle[1], goal_angle[0])) 
+		angle_to_reach = 180 - degrees(atan( goal_angle[1]/ goal_angle[0])) 
 	else : 
-		aim_angle = degrees(atan2( goal_angle[1], goal_angle[0]))
-	if aim_angle < 10 and aim_angle > - 10 : 
+		angle_to_reach = degrees(atan( goal_angle[1]/ goal_angle[0]))
+	if angle_to_reach < 5 and angle_to_reach > - 5 : 
 		orientation_done = True 
 		first_orientation = False
-	return (aim_angle, orientation_done) 
+	return (angle_to_reach, orientation_done) 
 
 
 
-def orientation(angle_to_reach, vel_msg):
+def orientation(angle_to_reach, vel_msg, add_angle, aim_angle_init):
 	global last_goal_reached
 	if not last_goal_reached :
 		if angle_to_reach < 0 :
 			vel_msg.angular.z = -rospy.get_param("cmd_vel_init")[1]
 		else : 
 			vel_msg.angular.z = rospy.get_param("cmd_vel_init")[1]
+		if add_angle != 0 or abs(aim_angle_init) > 25 :
+			if abs(add_angle) > 100 or abs(aim_angle_init) > 25 : 
+				vel_msg.angular.z = vel_msg.angular.z*1.5
+				print("*1.5 : " + str(aim_angle_init))
+			elif abs(add_angle) > 50 or abs(aim_angle_init) > 10 : 
+				vel_msg.angular.z = vel_msg.angular.z*1.0
+				print("*1.0 : " + str(aim_angle_init))
+			else :
+				vel_msg.angular.z = vel_msg.angular.z*0.75
+				print("*0.75 : " + str(aim_angle_init))
+			print("angle_to_add : " + str(add_angle))	
 	
 def move_forward(pt_goal_base_link, vel_msg, orientation_done, dist):
 	global last_goal_reached
@@ -217,7 +233,7 @@ if __name__ == '__main__':
 	rospy.Subscriber("/emergency_stop", emergency, stop_robot)
 
 	#Person presence behind 
-	rospy.Subscriber("/follower_presence", emergency, wait_for_follower)
+	rospy.Subscriber("/person_following", person_presence, wait_for_follower)
 
 	
 	while not rospy.is_shutdown():

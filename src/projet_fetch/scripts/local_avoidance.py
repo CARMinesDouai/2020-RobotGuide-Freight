@@ -16,7 +16,7 @@ rospy.init_node('Local_avoidance', anonymous=True)
 first_orientation = True
 laser_list = []
 angle_to_add = 0
-rospy.set_param("cmd_vel_init", [0.2,0.2])
+rospy.set_param("cmd_vel_init", [0.2,0.3])
 rospy.set_param("cmd_vel_correction", [1,1])
 
 
@@ -153,22 +153,22 @@ def angle_avoidance_function():
 def angle_decrementation():
 	global angle_to_add
 	if angle_to_add > 100 : 
-		angle_to_add = angle_to_add - 2.5	
+		angle_to_add = angle_to_add - 4
 	elif angle_to_add < -100 : 
-		angle_to_add = angle_to_add + 2.5
+		angle_to_add = angle_to_add + 4
 	if angle_to_add > 50 and angle_to_add <= 100 : 
-		angle_to_add = angle_to_add - 2
+		angle_to_add = angle_to_add - 3
 	elif angle_to_add >= -100 and angle_to_add < - 50 : 
-		angle_to_add = angle_to_add + 2
+		angle_to_add = angle_to_add + 3
 	if angle_to_add > 0 and angle_to_add <= 50 : 
-		angle_to_add = angle_to_add - 1.5
+		angle_to_add = angle_to_add - 2
 	elif angle_to_add >= -50 and angle_to_add < 0 : 
-		angle_to_add = angle_to_add + 1.5
+		angle_to_add = angle_to_add + 2
 
 def ajust_velocity(left_min_dist, right_min_dist, Dmax, Dmin):
 	global angle_to_add
 	Int_dist = (Dmax-Dmin)/10
-	#vitesse lineaire variant entre *0.1 et *1 
+	#vitesse lineaire variant entre *0.1 et *0.7 
 	Int_linear = (1.0-0.1)/10
 	#vitesse angulaire variant entre *1 et *2 
 	Int_angular = (2.0-1.0)/10

@@ -107,8 +107,9 @@ def easy_face_reco(frame, known_face_encodings, known_face_names):
             face_recon = True
             person_pres.Presence=True
         else:
-            person_pres.Presence=False
-            name = "Unknown"
+            #person_pres.Presence=False
+            name = "unknown"
+            print("Unknown")
         face_names.append(name)
     for (top, right, bottom, left), name in zip(face_locations_list, face_names):
         cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
@@ -155,7 +156,7 @@ if __name__ == '__main__':
         files.append(file_)
     if len(files)==0:
         raise ValueError('No faces detect in the directory: {}'.format(face_to_encode_path))
-    known_face_names = [os.path.splitext(ntpath.basename(file_))[0] for file_ in files]
+    #known_face_names = [os.path.splitext(ntpath.basename(file_))[0] for file_ in files]
     known_face_names = ["Pierre" , "Paul" ]
 
     known_face_encodings = []
@@ -171,7 +172,7 @@ if __name__ == '__main__':
     pipeline.start()
     print('[INFO] Webcam well started')
     print('[INFO] Detecting...')
-    while True:
+    while not rospy.is_shutdown():
         # Wait for a coherent pair of frames: depth and color
         frames = pipeline.wait_for_frames()
         depth_frame = frames.get_depth_frame().as_depth_frame()
@@ -181,15 +182,19 @@ if __name__ == '__main__':
         #dist_total_average=distance_person(depth_frame)
         #increment+=1
         cv2.imshow('Easy Facial Recognition App', color_image)
+        print ("coord_faces[0][0]==0" + str(coord_faces[0][0]))
+        print("name==\"unknown\" : " + str(name))
+        print("name==\"unknown\" : " + str(name=="unknown"))
         if coord_faces[0][0]==0 or name=="unknown":
             counter_missing+=1
+            print(" ")
         else:
             counter_missing=0
-        if counter_missing>10:
+        if counter_missing>20:
             person_pres.Presence=False
-        """print(coord_faces[0][0])
+        #print(coord_faces[0][0])
         print("counter="+str(counter_missing))
-        print("presence="+str(person_pres.Presence))"""
+        #print("presence="+str(person_pres.Presence))"""
         _cmd_pub.publish(person_pres)
         if cv2.waitKey(1) == ord('q'):
             break

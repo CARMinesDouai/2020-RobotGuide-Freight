@@ -63,7 +63,7 @@
 	
 	<!-- Node de reconnaissance faciale pour indiquer si la personne suit bien ou non le robot --> 
 	<group if="$(arg follower)">
-		<node name="person_following" pkg="person_following" type="person_following.py"  />
+		<node name="person_following" pkg="person_following" type="easy_facial_recognition.py"  />
 	</group>	
 </launch>
 
