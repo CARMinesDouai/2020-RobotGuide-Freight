@@ -151,6 +151,27 @@ if __name__ == '__main__':
     rospy.init_node("facial_recognition",anonymous=True)
     _cmd_pub=rospy.Publisher("/person_following",person_presence,queue_size=1)
     rospy.Subscriber("/face_capture",capture, wait_for_capture)
+    #
+    print('[INFO] Faces well imported')
+    print('[INFO] Starting Webcam...')
+    pipeline = rs.pipeline()
+    config = rs.config()
+    config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+    config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+    pipeline.start(config)
+    print('[INFO] Webcam well started')
+    print('[INFO] Detecting...')
+    print('[INFO] Photo Waiting')
+    while not face_save:
+            frames = pipeline.wait_for_frames()
+            depth_frame = frames.get_depth_frame().as_depth_frame()
+            color_frame = frames.get_color_frame()
+            color_image = np.asanyarray(color_frame.get_data())
+            if face_capture.take_capture:
+                crop_image=color_image[160:480,0:480]
+                cv2.imwrite(str(packagePath)+"/scripts/known_faces/image.jpg",crop_image)
+                cv2.imshow('image_save',crop_image)
+                face_save=True
     print('[INFO] Importing faces...')
     known_faces_path=str(packagePath)+"/scripts/known_faces/"
     face_to_encode_path = Path(known_faces_path)
@@ -168,29 +189,8 @@ if __name__ == '__main__':
         image = np.array(image)
         face_encoded = encode_face(image)[0][0]
         known_face_encodings.append(face_encoded)
-
-    print('[INFO] Faces well imported')
-    print('[INFO] Starting Webcam...')
-    pipeline = rs.pipeline()
-    config = rs.config()
-    config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-    config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-    pipeline.start(config)
-    print('[INFO] Webcam well started')
-    print('[INFO] Detecting...')
-    print('[INFO] Photo Waiting')
+    print('[INFO] Let''s started')
     while not rospy.is_shutdown():
-        while not face_save:
-            frames = pipeline.wait_for_frames()
-            depth_frame = frames.get_depth_frame().as_depth_frame()
-            color_frame = frames.get_color_frame()
-            color_image = np.asanyarray(color_frame.get_data())
-            if face_capture.take_capture:
-                crop_image=color_image[160:480,0:480]
-                cv2.imwrite(str(packagePath)+"/scripts/known_faces/image.jpg",crop_image)
-                cv2.imshow('image_save',crop_image)
-                face_save=True
-                print('[INFO] Let''s started')
         # Wait for a coherent pair of frames: depth and color
         frames = pipeline.wait_for_frames()
         depth_frame = frames.get_depth_frame().as_depth_frame()
