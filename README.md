@@ -259,18 +259,34 @@ Description de son fonctionnement :
 
 **Node : person_tracking.py**
 
-Cette node permet le suivi d'une personne par le robot à l'aide du retour de la caméra et des données laser:  
+Fonction : Suivi de personne et Reconnaissance humain
+Package : Person_tracking
+Node : real_time_object_detection.py
 
-- la caméra permet la détection d'une personne.  
-- la détection de personne se base sur un programme de deep learning.  
-- le laser permet le contournement d'objet se trouvant sur le passage entre la personne à suivre et le robot.  
-- Cette node publie sur le topic "cmd_vel" et souscrit au topic "/base_scan".  
+Lancer les nodes:  
+Robot:  
+``` rosrun turtlebot_bringup minimal.launch```  
+Laser:  
+``` rosrun urg_node urg_node```  
+Tracking:  
+``` rosrun person_tracking real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel ```  
+
+Fonctionnement du node:  
+- Le node utilise des modéles pré-entrainés provenant du deep-learning framework caffee model, il est capable de distinguer de nombreux éléments. Dans notre cas, nous le faisons reconnaître des humains.
+- L'objectif de ce node est de suivre l'humain, il utilise pour cela camera realsense
+- Il publie des données sur le topic /cmd_vel_mux/input/navi afin de commander le robot
+- Il reçoit des données du laser et souscrit au topic /scan afin d'éviter les obstacles se plaçant entre l'humain et le robot.
+- Il utilise les données renvoyées par la reconnaissance afin de situer la personne.
+
+Pistes d'améliorations:
+- Utilisation d'une camera motorisée afin de pouvoir suivre la personne en permanence et ne pas la perdre de vue.
+- Amélioration de la brique réactive permettant le suivi de la personne. 
 
 **Node : person_following.py**
 
 Fonction : Reconnaissance Faciale  
-Package = Person_following  
-Node = easy_facial_recognition  
+Package : Person_following  
+Node : easy_facial_recognition  
 
 Lancer le node:   
 ```rosrun person_following easy_facial_recognition.py```  
@@ -283,17 +299,7 @@ Fonctionnement du node:
 Pistes d'améliorations:  
 - Augmentation rapidité de reconnaissance grâce aux partages des calculs sur la Neural Compute Stick 2 ou de l'utilisation du Multithreading  
 - Ajout de la possibilité d'une prise de photo permanente (Pour l'instant, possibilité d'ajouter une photo seulement après le lancement du programme)  
-
-
-**Piste réflexion amélioration node person_following**
-
-Amélioration vitesse reconnaissance faciale :
-- Utilisation de la neural stick : installation et utilisation de l'espace de travail OpenVino (probléme de version)
-- Reflexion sur l'utilisation du multithreading afin de partager les différentes tâches ( difficile à adapter à la reconnaissance faciale)
-- Evaluation de la distance de la personne, utilisation du cadre de reconnaissance et de la fonction de la librairie Pyrealsense2 ( getDistance())
-
-Amélioration évaluation distance person_tracking:
-- Utilisation de la fonction getDistance() de la librairie Pyrealsense2 mais non fonctionnel
+- Amélioration du calcul de distance de la personne et utilisation pour la brique de navigation move_to.py  
 
 
 Vidéo de présentation du projet :
