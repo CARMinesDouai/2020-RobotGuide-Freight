@@ -44,6 +44,29 @@ Ajout de cette ligne en fin de fichier :
  ```sudo apt install nodejs-legacy```  
  ```sudo apt install ros-kinetic-web-video-server```  
 
+**Installation des librairies pour la partie vision**
+Verifiez la version de python utilisée:  
+Dlib:  
+```pip3 install dlib```  
+OpenCV:  
+```pip3 install opencv-python```  
+Pillow:  
+```pip3 install pillow```  
+Numpy:  
+```pip3 install numpy```  
+Imutils:  
+```pip3 install imutils```  
+Argparse:  
+```pip3 install argparse```  
+os:  
+```pip3 install os```  
+rospy:  
+```pip3 install rospy```  
+ntpath:  
+```pip3 install ntpath```  
+pyrealsense2:  
+```pip3 install pyrealsense2```  
+
 **Installation du projet :**  
 ```cd```  
 ```git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```  
@@ -53,6 +76,16 @@ Ajout des liens symboliques dans catkin :
 ```ln -s <2020-RobotGuide-Freight>/src/projet_fetch/```  
 ```ln -s <2020-RobotGuide-Freight>/src/turtlebot_web-master/```  
 
+**Optionel : Lancer nodes sur 2 PC distincts avec un master commun**
+- Ouvrir le fichier bashrc:  
+``` gedit ~/.bashrc```  
+- Ajoutez les lignes ci dessous à la fin du fichier:  
+export ROS_IP=`hostname -I`  
+export ROS_MASTER_URI=http://<adresse ip du master>:11311  
+- Ouvrir le fichier hosts:  
+```sudo gedit /etc/hosts```  
+- Ajouter le nom du pc:
+```<adresse ip du pc distant> <nom du pc distant>```  
 
 #### A mettre dans les annexes
 - Ouvrir le fichier bashrc :  
@@ -235,10 +268,22 @@ Cette node permet le suivi d'une personne par le robot à l'aide du retour de la
 
 **Node : person_following.py**
 
-Cette node permet la reconnaissance faciale de la personne qui suit le robot:  
+Fonction : Reconnaissance Faciale  
+Package = Person_following  
+Node = easy_facial_recognition  
 
-- Elle renvoie un message ROS constitué de 2 variables (1 bool et 1 int) donnant la présence ou non d'une personne et la distance à laquelle se trouve la personne.  
-- La reconnaissance faciale est basée sur du deep learning, des modéles pre-entrainés provenant de la bibliothéque dlib sont utilisés afin de reconnaitre les visages des personnes selon la forme de leur visage.  
+Lancer le node:   
+```rosrun person_following easy_facial_recognition.py```  
+
+Fonctionnement du node:  
+- Le node utilise des modéles pré-entrainés (Deep learning) provenant de la librairie Dlib contenus dans le dossier "pretrained-models"  
+- Le package contient un dossier nommé " known faces " dans lequel nous retrouvons les visages des personnes que l'on souhaite reconnaître, nous pouvons au début du programme ajouter des photos grâce à un message ROS (type projet_fetch/capture) et à l'application web.  
+- Le node est aussi capable de calculer la distance à laquelle se trouve la personne grâce notamment à la fonction get_distance().  
+
+Pistes d'améliorations:  
+- Augmentation rapidité de reconnaissance grâce aux partages des calculs sur la Neural Compute Stick 2 ou de l'utilisation du Multithreading  
+- Ajout de la possibilité d'une prise de photo permanente (Pour l'instant, possibilité d'ajouter une photo seulement après le lancement du programme)  
+
 
 **Piste réflexion amélioration node person_following**
 
