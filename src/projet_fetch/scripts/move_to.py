@@ -27,6 +27,7 @@ path_pos_in_odom = []
 real_number_of_point_to_reach = 0 
 reached_point = 0
 follower_presence = True
+emergency_stop = False
 
 # Initialize node parrameters (parrameter name, default value)
 def node_parameter(name, default):
@@ -47,6 +48,7 @@ def initialize(data):
 	global path_pos_in_odom
 	global real_number_of_point_to_reach
 	global reached_point
+	global emergency_stop
 	last_goal_reached = False
 	first_orientation = True
 	dataFrequency = -1 
@@ -55,12 +57,33 @@ def initialize(data):
 	reached_point = 0
 	rospy.set_param("cmd_vel_init", [0.2,0.3])
 	#Var inutile 
-	rospy.set_param('angle_to_add', 0)	
+	rospy.set_param('angle_to_add', 0)
+	emergency_stop = False
 
+def initialize_emergency(data):	
+	print("INITIALIZE EMERGENCY CALLED")
+	global last_goal_reached
+	global first_orientation
+	global dataFrequency
+	global path_pos_in_odom
+	global real_number_of_point_to_reach
+	global reached_point
+	global emergency_stop
+	last_goal_reached = False
+	first_orientation = True
+	dataFrequency = -1 
+	path_pos_in_odom = []
+	real_number_of_point_to_reach = 0 
+	reached_point = 0
+	rospy.set_param("cmd_vel_init", [0.2,0.3])
+	#Var inutile 
+	rospy.set_param('angle_to_add', 0)
+	emergency_stop = True	
+	
 #Si un objet est trop proche du turtle, il s'arrete :
 def stop_robot(data) : 
 	if data.stop_all : 
-		initialize(stop)
+		initialize_emergency(data.stop_all)
 
 def wait_for_follower(data):
 	global follower_presence
@@ -101,6 +124,8 @@ def movement_manager():
 	global last_goal_reached
 	global reached_point
 	global follower_presence
+	global emergency_stop
+	global first_orientation
 	#print("follower_presence : " + str(follower_presence))
 	add_angle = 0 
 	aim_angle_init = 0
@@ -132,7 +157,7 @@ def movement_manager():
 		#print("AFTER CORRECT AVOID vel linear : " + str(vel_msg.linear.x) + " vel angular : " + str(vel_msg.angular.z))	
 		print("Vel message : " + str(vel_msg) )
 		#On verifie que la personne suit bien le robot
-		if follower_presence : 
+		if (follower_presence or first_orientation) and not emergency_stop : 
 			#Publication de la commande de vitesse 
 			vel_pub.publish(vel_msg)
 	
@@ -153,6 +178,8 @@ def point_goal_in_base_link(reached_point):
 	global path_pos_in_odom
 	_pt_odom = PointStamped()
 	_pt_odom.header.frame_id = "odom"
+	if reached_point > len(path_pos_in_odom) - 1:
+		reached_point=0
 	_pt_odom.point.x = path_pos_in_odom[reached_point][0]
 	_pt_odom.point.y = path_pos_in_odom[reached_point][1]
 	_pt_odom.point.z = 0
@@ -179,6 +206,7 @@ def aim_angle_to_reach(pt_goal_base_link, angle_to_reach):
 
 def orientation(angle_to_reach, vel_msg, add_angle, aim_angle_init):
 	global last_goal_reached
+	global first_orientation
 	if not last_goal_reached :
 		if angle_to_reach < 0 :
 			vel_msg.angular.z = -rospy.get_param("cmd_vel_init")[1]
@@ -194,6 +222,8 @@ def orientation(angle_to_reach, vel_msg, add_angle, aim_angle_init):
 			else :
 				vel_msg.angular.z = vel_msg.angular.z*0.75
 				print("*0.75 : " + str(aim_angle_init))
+		if first_orientation : 
+			vel_msg.angular.z = vel_msg.angular.z*2
 			print("angle_to_add : " + str(add_angle))	
 	
 def move_forward(pt_goal_base_link, vel_msg, orientation_done, dist):
@@ -229,7 +259,7 @@ if __name__ == '__main__':
 	#New goal from web interface -> Initialisation 
 	rospy.Subscriber("/new_goal", new_goal, initialize)
 
-	#Too close object -> STOP
+	#Too close object or user from web -> STOP
 	rospy.Subscriber("/emergency_stop", emergency, stop_robot)
 
 	#Person presence behind 
