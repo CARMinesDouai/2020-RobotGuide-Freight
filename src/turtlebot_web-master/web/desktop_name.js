@@ -48,7 +48,15 @@ var Desktop = function (a) {
   };
   
   this.stop = function(){
-    var coucou = 0
+    var newGoal_pub = new ROSLIB.Topic({
+      ros : ros,
+      name : '/emergency_stop',
+      messageType : 'projet_fetch/emergency'
+    });
+    var newgoal = new ROSLIB.Message({
+	stop_all: true
+    });
+    newGoal_pub.publish(newgoal);
   };
 
   this.getDesktopNames = function (){

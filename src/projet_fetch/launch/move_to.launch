@@ -22,8 +22,11 @@
 	  <!-- AMCL (Position du robot dans la map et quelques parametres) -->
 	  <include file="$(find projet_fetch)/launch/includes/amcl/r200_amcl.launch.xml">
 	    <!-- Configuration de la position initiale du robot --> 
-	    <arg name="initial_pose_x" value="1.0"/>
+	    <!--<arg name="initial_pose_x" value="1.0"/>
 	    <arg name="initial_pose_y" value="-1.0"/>
+	    <arg name="initial_pose_a" value="1.5"/>-->
+	    <arg name="initial_pose_x" value="-54.0"/>
+	    <arg name="initial_pose_y" value="64.25"/>
 	    <arg name="initial_pose_a" value="1.5"/>
 	  </include>
 	

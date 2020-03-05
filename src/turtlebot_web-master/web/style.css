@@ -144,12 +144,13 @@ html, body {
   /*margin-left: 8vw;*/
 
 }
+/* Taille des afficheurs de droite */
 .stuffViewer .controls {
   overflow: scroll;
-  height: 30vh;
+  height: 45vh;
 }
 .stuffViewer .desktop_handler{
-  height: 30vh;
+  height: 15vh;
 }
   
 
