@@ -32,24 +32,59 @@ Globalement, les parties ont tout de même été réalisées individuellement de
 Présentation du travail
 ==
 
-### Prise en main du robot fetch 
+## Prise en main du robot fetch 
 
 Les premiers jours de ce projets, nous nous sommes penchés sur l'utilisation du robot fetch. Nous avons d'abord cherché à accéder au données des nodes déjà en place sur le robot depuis un pc extèrieur.  
 Nous avons réussi à configurer un pc pour l'accès aux données des nodes du robot fetch (voir annexes).
 Nous avons dès lors mis en place un algorithme afin de faire le mapping du bâtiment. Cependant, bien que celui-ci fût fonctionnel, des problèmes de batteries nous ont amenés à travailler à partir d'un turtlebot. Tout le travail a été effectué avec le turtlebot.  
 
-### Travail sur le déplacement du robot
+## Travail effectué pour la partie déplacement et web 
 
-**Implémentations chronologiques**  
-L'objectif étant de joindre les nodes les uns aux autres afin d'obtenir le résultat souhaité, voici ce qui a été réalisé :  
-- Déplacement du robot d'un point A vers un point B (orientation et avancée) sans aucun obstacles.
+### Implémentations chronologiques    
+
+**Déplacement :**  
+- Déplacement du robot d'un point A vers un point B (orientation et déplacement) sans aucun obstacles.
 - Déplacement du robot d'un point A vers un point B avec évitement d'obstacles locaux (Boîtes/personnes). Gestion de l'environnement proche à partir des données du lidar.  
 - Ecriture d'un algorithme de dijkstra afin de determiner le chemin le plus court entre différents points. L'idée à l'origine était de placer des points clés dans le batîment (et ce manuellement, codés en dur) afin que le calcul du chemin le plus court soit fait à partir de la position du robot et de ces différents points.  
 Du fait de la non adaptabilité et de la chronophagie dans la mise en place des points clés pour l'algorithme précédent, une autre voie à été explorée.  
 - Récupération du move_base du turtlebot afin d'en extraire le path planner global. Suppression des algorithmes de déplacement et de path planner local de cette brique.  
-- Récupération d'une carte du batîment et déplacement dans celui-ci via RVIZ avec avec nôtre algorithme de déplacement et le path planner éxtrait.  
-- Positionnement automatique du robot dès l'ouverture de la carte dans rviz via les coordonnées choisies dans le script.  
-- 
+- Récupération d'une carte du batîment et déplacement dans celui-ci via RVIZ avec avec nôtre algorithme de déplacement et le path planner global éxtrait.  
+
+**Mise en place de l'environnement de travail :**  
+- Positionnement automatique du robot dès l'ouverture de la carte dans RVIZ via les coordonnées choisies dans le script.  
+- Envoie d'une coordonnée objectif depuis un node et non plus depuis RVIZ avec un 2dNavGoal. 
+- Possibilité d'envoyer le robot à des coordonnées précises donc potentiellement à un bureau d'une personne. La création d'un ensemble de node permettant la gestion des coordonnées des bureaux depuis un fichier texte et RVIZ à donc été réalisé.
+- Affichage de marqueurs sur RVIZ afin de visualiser les bureaux de la base de donnée. 
+
+**Interface web utilisateur :**  
+- Installation du projet existant pour l'utilisation de ROS depuis une page web.  
+- Compréhension de l'utilisation des publisher et listener depuis la page web éxistante dans le projet cité précédemment et son code en Javascript/HTML.  
+- Création d'un node envoyant les données des bureaux sur un topic.  
+- Récupération de ces données via un listener depuis le code javascript.  
+- Création de boutons sur la page web se créant dynamiquement en fonction des bureaux présent dans le fichier texte.  
+- Création d'un publisher permettant d'envoyer le bureau ayant été selectionné dans la page web et association de ce publisher aux boutons.  
+- Ajout d'un outil permettant la supression de la gestion des bureaux depuis l'interface web puis supression de celui-ci du fait de son obsolescence pour l'utilisateur.  
+- Ajout d'un bouton permettant de stopper le robot si l'utilisateur se trompe de position.  
+
+**Ajouts lors de la fusion de la partie vision avec le reste :**
+- Création d'un bouton dans l'interface publiant un booléen pour prévenir que l'utilisateur va se prendre en photo.
+- Modification du move_to pour que le robot s'arrête ou reparte en fonction de la présence ou non de l'utilisateur qui le suit.
+
+### Travail effectué pour la partie vision
+
+Voies d'amélioration
+==
+
+**La brique d'évitement :**   
+- Il semble que certaines situations restent problématique bien qu'elles soient difficile à cerner. Peut-être faudrait-il forcer un peu plus la réorientation vers le point objectif après la correction d'évitement.  
+- La visualisation des obstacles est peut être parfois un peut trop tardive.  
+- Lorsque la vitesse du robot est augmentée, l'évitement peut alors poser problème. Il faudrait que les paramètres de vitesse soient configurables de façon externe au script et que les paramètres d'évitement soient calculés en fonction.  
+
+**Le path planner :**  
+- Le robot n'est pour le moment pas capable de se sortir d'une situation où la voie est bloquée de façon imprévue. L'idéal serait qu'il recalcule un autre chemin dans cette situation.  
+
+**Page web :**  
+- Dans l'idée, la gestion des bureaux et de leur base de donnée pourrait-être faite totalement depuis la page web. On peut envisager d'envoyer les points de position des bureaux par la page web en selectionnant dans la carte affichée directement et de rentrer leurs noms ensuite.
 
 
-####
+
