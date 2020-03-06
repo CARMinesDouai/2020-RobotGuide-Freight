@@ -11,8 +11,7 @@ Les fonctionnalités sont les suivantes:
 - Un utilisateur peut selectionner le bureau de la personne qu'il veut rejoindre sur une interface web.  
 - Le robot accompagne alors la personne au bureau demandé. Il prend bien entendu le chemin le plus efficace.  
 - Le robot est capable d'éviter des obstacles locaux (Comme une personne ou un carton par exemple) à l'aide d'un capteur de distance à ballayage.  
-- Des capteur doivent permettre d'indiquer la présence de la personne supposée le suivre. Effectivement, le robot doit s'arrêter si la personne ne suit plus (Si elle s'arrête pour discutter avec une autre personne par exemple.)  
-- Une caméra réalsense permet d'indiquer la présence de la personne supposée suivre le robot. Le robot s'arrête alrs si la personne ne le suit plus (Si elle s'arrête pour discutter avec une autre personne par exemple.  
+- Une caméra réalsense permet d'indiquer la présence de la personne supposée suivre le robot. Le robot s'arrête alors si la personne ne le suit plus (Si elle s'arrête pour discutter avec une autre personne par exemple).  
 
 Ces objectifs de fonctionnement décomposent donc le projet en trois grandes parties :  
 - La brique de déplacement réactive du robot permettant d'aller d'un bureau à un autre  
@@ -37,10 +36,10 @@ PC 2 :
 ```roslaunch person_following person_following.launch```  
 
 ### Utilisation :
-Le départ du robot se fait toujours à la [position initiale](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/tree/master/position_initiale).
+Le départ du robot se fait toujours à la [position initiale](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/tree/master/position_initiale).  
 Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
 ```http://<PC1 ip>:8080```  
-Selection du bureau à rejoindre via l'un des différents bouttons de l'interface une fois la carte chargée sur la page web. A noté qu'une capture de la personne doit être faite (toujours depuis l'interface) pour le fonctionnement de la reconnaissance faciale.  
+Selection du bureau à rejoindre via l'un des différents bouttons de l'interface une fois la carte chargée sur la page web. A noter qu'une capture de la personne doit être faite (toujours depuis l'interface) pour le fonctionnement de la reconnaissance faciale.  
 
 Les launch files et leur utilisation  
 ==
@@ -95,7 +94,7 @@ Avec évitement d'obstacles locaux :
 
 **Utilisation**  
 Le départ du robot se fait toujours à la [position initiale](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/tree/master/position_initiale) où il apparait sur RVIZ et selon la même orientation.  
-A noter que sa position initiale et son orientation est modifiable temporairement depuis RVIZ ou de façon permanente directement dans le launch file move_to.  
+A noter que sa position initiale et son orientation sont modifiables temporairement depuis RVIZ ou de façon permanente directement dans le launch file move_to.  
 Une fois la commande roslaunch faite, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ.  
 
 ![2D_navGoal](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/2D_navGoal.png)  
@@ -123,34 +122,12 @@ Fonctionnement des launch files via rqt_graph
 ![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/desktop_data_rqt.png)  
 
 **Explications :**  
-La node "desktop_manager" est la node permettant l'échange avec l'utilisateur.  
-Lors de l'ajout de bureaux dans la base de donnée, cette node est prête à récuperer les coordonnées du bureau à ajouter qui lui sont envoyées depuis RVIZ sur le topic /clicked_point.  
+Le node "desktop_manager" est le node permettant l'échange avec l'utilisateur.  
+Lors de l'ajout de bureaux dans la base de donnée, ce node est prêt à récuperer les coordonnées du bureau à ajouter qui lui sont envoyées depuis RVIZ sur le topic /clicked_point.  
 Lorsque l'utilisateur veut supprimer un bureau, il rentre son nom qui est alors envoyé via le topic /desktop_name_to_suppress.  
-La node Desktop_getName_and_sendCoord récupère alors le nom du bureau et publie les coordonnées correspondantes et desktop_manager va les supprimer.  
+La node Desktop_getName_and_sendCoord récupère alors le nom du bureau et publie les coordonnées correspondantes à ce bureau qui sont sur la ligne suivante. Le node desktop_manager récupère cette donnée  va les supprimer du fichier texte.  
+A noter que le node desktop_pos_markers.py n'apparait pas sur ce graph mais a été ajouté pour visualiser des points sur RVIZ au positions des bureaux de la base de donnée.  
 
-## Mapping à partir du robot turtlebot
-
-**Rqt_graph :**  
-
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/desktop_data_rqt.png)  
-
-**Explications :**  
-
-## Déplacement du robot 
-
-**Rqt_graph :**  
-
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/desktop_data_rqt.png)  
-
-**Explications :**  
-
-#### Déplacement réactif et non réactif
-
-**Rqt_graph :**  
-
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
-
-**Explications :**  
 
 ## Déplacement du robot depuis l'interface web
 
@@ -160,20 +137,30 @@ Le rqt_graph a suivre correspond à celui affiché lorsque l'application est lan
 
 ![rqt_gaph_complet](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/rqt_complet.png)  
 
-**Explications :**  
-Partie web : 
-La page web correspond au node /rosbrige_websocket. On peut noter qu'elle reçoit la map
+**Présentation du graph - Cheminement depuis le web :**  
+ 
+La page web correspond au node /rosbrige_websocket.  
+Les noms des bureaux ayant déjà été récupérées lors du rqt_graph, la souscription de la page web à /desktop_name_data n'apparait pas.
+On peut noter que la map est récupérée ainsi que la position du robot ce qui permet leur affichage sur le web.  
+Ensuite, le node publie deux choses lorsqu'un bouton de bureau objectif est selectionné :  
+Un booléen récupéré par move_to pour initialiser les variables et qu'il s'arrête dans l'attente d'un nouveau path.
+Un nom de bureau. 
+Le nom de bureau est récupéré et envoyé au node /desktop_coord_publisher qui publie les coordonnées correspondantes à ce bureau.  
+Ces données sont récupérées par /move_base puis au path_planner.  
+Le path est alors transmis au node /move_to récupère des données du node /local_avoid pour corriger la trajectoire ou tout stopper si besoin.  
+Dans le même temps, move_to récupère un booléen via le topic /person_following qui lui dit si la personne le suit ou non.  
+Effectivement, c'est le node /move_to qui publie les commandes de vélocités.  
 
 Description des différentes nodes :  
 == 
  
-Les nodes à suivre sont placées dans le dossier scripts du package projet_fetch.  
+Les nodes à suivre sont placés dans le dossier scripts du package projet_fetch sauf pour les nodes de visions qui sont dans le package correspondant à leur nom de node.  
 
 ### Déplacement :  
 **Node : move_to.py**  
 
 Ce node permet le déplacement du robot d'un point A vers un point B avec des points intermédiaires.  
-Il determine la distance aux points de passage du robot au fur et à mesure, il envoie les commandes vélocité, corrigée ou non selon récéption des données du node local_avoidance.py. Ces données ne sont pas envoyées depuis un topic mais sont des paramètres modifiés internes à ros (rosparam).   
+Il determine la distance aux points de passage du robot au fur et à mesure, il envoie les commandes vélocité, corrigée ou non selon récéption des données du node local_avoidance.py. Ces données de vélocités ne sont pas envoyées depuis un topic mais sont des rosparam modifiés directement dans le script.   
 Souscription : 
 - Le node souscrit au topic "/move_base/DWAPlannerROS/global_plan" dans l'attente des points objectifs à atteindre. Le message reçu est de type Path.  
 - Le node souscrit au topic "/new_goal" qui est un booléen. Lors de la reception de cette donnée, les paramètres sont réinitialisés et le robot s'arrête dans l'attente d'un Path.   
@@ -190,21 +177,23 @@ Description de son fonctionnement :
 - Récupération des données laser via le topic /scan.  
 - Publication sur le topic /emergency_stop.  
 
-### WEB :  
+### WEB et nodes associés :  
 **Node : desktop_name_publisher.py**  
 Ce node permet de publier les noms des bureaux présent dans un fichier texte contant aussi les coordonnées.   
-Il publie ces noms dans le topic /desktop_name_data.  Ces données sont utilisées pour le moment pour l'affichage des boutons dans la page web.
+Il publie ces noms dans le topic /desktop_name_data.  Ces données sont utilisées pour l'affichage du nom des boutons dans la page web.  
 
 **Node : get_and_send_desktop_to_reach.py**  
-
 Ce node souscrit au topic /desktop_to_reach_name. Lorsque le nom du bureau auquel aller est reçu, il récupère les coordonnées de celui-ci dans le fichier texte et envoie cette donnée en publiant sur le topic /move_base_simple/goal pour que le path soit calculé.  
 
-### Gestion des bureaux :
-**desktop_pos_creator.py**
-Ce node permet l'échange avec l'utilisateur qui voudrait faire des modifications des bureaux éxistants (Position, Nom, Existance).  
-Souscription :  
-Publication :  
+**Node rosbridge_websocket :**  
+Souscription à de nombreux différents topics.  
+Voir le rqt_graph complet précédemment ou voir le code correspondant dans le package turtlebot_web-master/web.  
+Cependant, pour le fonctionnement des boutons, le nom des bureaux est récupéré via le topic /desktop_name_data.   
+Ensuite, un message contenant le nom du bureau est publié lorsque le bouton est enfoncé.   
 
+### Gestion des bureaux :  
+
+Voir rqt_graph et explications plus haut.
 
 ### Vision
 **Node : person_tracking.py**  
@@ -262,12 +251,11 @@ Voies d'amélioration du projet :
 - Gestion de la base de donnée de bureaux plus propre directement via l'interface web  
 - Brique d'évitement plus réactive  
 
-##ANEXES 
-
+## ANEXES 
 
 **Node : Sending_path_node.py :**   
 
-Cette node permet la determination du chemin le plus court pour que le robot puisse se déplacer d'un point A vers un point B.  
+Ce node permet la determination du chemin le plus court pour que le robot puisse se déplacer d'un point A vers un point B.  
 Description de son fonctionnement :  
 - La configuration des points par lesquels le robot peut/doit passer se fait directement en brut dans le fichier .py.  
 - Ensuite, cette node écoute la position du robot en permanance via le topic */robot_pose*.  
