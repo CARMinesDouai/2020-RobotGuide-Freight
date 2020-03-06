@@ -53,8 +53,8 @@ Nous avons utilisé cette méthode pour lancer le node de détéction sur un aut
 Ouvrir le fichier bashrc:  
 ``` gedit ~/.bashrc```  
 Ajoutez les lignes ci dessous à la fin du fichier:  
-```export ROS_IP=\`hostname -I\````  
-export ROS_MASTER_URI=http://<adresse ip du master>:11311  
+```export ROS_IP=`hostname -I` ```  
+```export ROS_MASTER_URI=http://<adresse ip du master>:11311```   
 Ouvrir le fichier hosts:  
 ```sudo gedit /etc/hosts```  
 Ajouter le nom du pc :  
