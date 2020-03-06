@@ -70,13 +70,13 @@ La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois 
   3- Supprimer un bureau de la liste existante.  
 La gestion se fait pour le moment dans la console, les commandes à entrer sont indiquées (Sauf pour quitter où la commande CTRL + C est necessaire) :
 
-![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/desktop_manager.png)  
+![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/desktop_manager.png)  
 
 **Visualisation des bureaux**  
 Lors de l'ajout d'un bureau, celui-ci s'affiche dans RVIZ à sa position.  
 Lors de la supression de l'un d'eux, l'affichage est pour le moment encore là tant qu'il n'y a pas redémarrage de la node.  
 
-![RVIZ_desktop_marker](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/Rviz_desktop_marker.png)  
+![RVIZ_desktop_marker](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/Rviz_desktop_marker.png)  
 
 ## Création de la carte du bâtiment à mapper 
 **Commande de lancement**  
