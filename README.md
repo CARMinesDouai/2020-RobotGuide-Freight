@@ -26,23 +26,22 @@ Installation du projet - Configuration de l'environnement
 
 Lancer la démo 
 ==
-#### Commandes de lancement : 
+## Commandes de lancement : 
 **Démo complète sur un pc (Problème possible de performance):**   
 ```roslaunch projet_fetch move_to.launch avoid:="True" web_app:="True" follower:="True"```  
 
-**Démo sur deux pc distincs (Délocalisation de la reconnaissance faciale) :**   
-Ajout de la reconnaissance faciale (Pour notre utilisation, lancée sur un autre pc):  
+**Démo sur deux pc distincs (Délocalisation de la reconnaissance faciale sur un autre PC) :**     
 PC 1 :  
 ```roslaunch projet_fetch move_to.launch avoid:="True" web_app:="True" follower:="False"```  
 PC 2 :  
 ```roslaunch person_following person_following.launch```  
 
-**Utilisation :**
+## Utilisation :
 Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
 ```http://<PC1 ip>:8080```  
-Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous :  
+Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous une fois la carte chargée sur la page web :  
 
-![Bureaux joignables](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_web.png)  
+![Bureaux joignables](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/desktop_web.png)  
 
 Les launch files et leur utilisation  
 ==
