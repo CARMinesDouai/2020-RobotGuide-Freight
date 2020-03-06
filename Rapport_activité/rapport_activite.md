@@ -86,5 +86,18 @@ Voies d'amélioration
 **Page web :**  
 - Dans l'idée, la gestion des bureaux et de leur base de donnée pourrait-être faite totalement depuis la page web. On peut envisager d'envoyer les points de position des bureaux par la page web en selectionnant dans la carte affichée directement et de rentrer leurs noms ensuite.
 
+## Annexes : 
 
+#### Configuration du robot freight 
+
+- Ouvrir le fichier bashrc :  
+    ```cd ~/.bashrc```  
+- Copier les lignes suivantes en fin de fichier :  
+    ```export ROS_MASTER_URI=http://freight100.local:11311```  
+    ```export ROS_IP=<my_address_ip>```  
+
+- Ouvrir ensuite le fichier hosts :  
+    ```sudo nano /etc/hosts```  
+- Ajouter l'invité correspondant au robot :   
+    ```10.1.16.68	freight100```  
 

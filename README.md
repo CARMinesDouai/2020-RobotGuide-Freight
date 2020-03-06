@@ -44,7 +44,7 @@ Ajout de cette ligne en fin de fichier :
  ```sudo apt install nodejs-legacy```  
  ```sudo apt install ros-kinetic-web-video-server```  
 
-**Installation des librairies pour la partie vision**
+**Installation des librairies pour la partie vision**  
 Verifiez la version de python utilisée:  
 Dlib:  
 ```pip3 install dlib```  
@@ -76,7 +76,8 @@ Ajout des liens symboliques dans catkin :
 ```ln -s <2020-RobotGuide-Freight>/src/projet_fetch/```  
 ```ln -s <2020-RobotGuide-Freight>/src/turtlebot_web-master/```  
 
-**Optionel : Lancer nodes sur 2 PC distincts avec un master commun**
+**Optionel : Lancer nodes sur 2 PC distincts avec un master commun**  
+Nous avons utilisé cette méthode pour lancer le node de détéction sur un autre PC et ainsi améliorer la vitesse de traîtement des données. 
 - Ouvrir le fichier bashrc:  
 ``` gedit ~/.bashrc```  
 - Ajoutez les lignes ci dessous à la fin du fichier:  
