@@ -29,7 +29,7 @@ Arthur JOSI : Partie déplacement - Partie web
 Configuration de l'environnement - Installation du projet :
 ==
 
-![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_manager.png)  
+![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/installation.md)  
 
 Les launch files et leur utilisation  
 ==
@@ -51,13 +51,13 @@ La node desktop_manager demande à l'utilisateur ce qu'il souhaite faire. Trois 
   3- Supprimer un bureau de la liste existante.  
 La gestion se fait pour le moment dans la console, les commandes à entrer sont indiquées (Sauf pour quitter où la commande CTRL + C est necessaire) :
 
-![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_manager.png)  
+![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/desktop_manager.png)  
 
 **Visualisation des bureaux**  
 Lors de l'ajout d'un bureau, celui-ci s'affiche dans RVIZ à sa position.  
 Lors de la supression de l'un d'eux, l'affichage est pour le moment encore là tant qu'il n'y a pas redémarrage de la node.  
 
-![RVIZ_desktop_marker](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/Rviz_desktop_marker.png)  
+![RVIZ_desktop_marker](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/Rviz_desktop_marker.png)  
 
 ## Création de la carte du bâtiment à mapper 
 **Commande de lancement**  
@@ -71,7 +71,7 @@ Quand la carte est complète, l'enregistrement de celle-ci est possible via la c
 **Visualisation**  
 La visualisation de la map en création est possible directement dans Rviz, déjà ouvert avec la commande de lancement.   
 
-![Mapping_rviz](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/mapping.png) 
+![Mapping_rviz](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/mapping.png) 
 
 
 ## Déplacement du robot vers un point objectif depuis RVIZ
@@ -113,7 +113,7 @@ Fonctionnement des launch files via rqt_graph
   
 **Rqt_graph :**  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/desktop_data_rqt.png)  
 
 **Explications :**  
 La node "desktop_manager" est la node permettant l'échange avec l'utilisateur.  
