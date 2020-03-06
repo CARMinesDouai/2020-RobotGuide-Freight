@@ -26,11 +26,11 @@ Installation du projet - Configuration de l'environnement
 
 Lancer la démo 
 ==
-####Commandes de lancement : 
-** Démo complète sur un pc (Problème possible de performance):**   
+#### Commandes de lancement : 
+**Démo complète sur un pc (Problème possible de performance):**   
 ```roslaunch projet_fetch move_to.launch avoid:="True" web_app:="True" follower:="True"```  
 
-** Démo sur deux pc distincs (Délocalisation de la reconnaissance faciale) :**   
+**Démo sur deux pc distincs (Délocalisation de la reconnaissance faciale) :**   
 Ajout de la reconnaissance faciale (Pour notre utilisation, lancée sur un autre pc):  
 PC 1 :  
 ```roslaunch projet_fetch move_to.launch avoid:="True" web_app:="True" follower:="False"```  
