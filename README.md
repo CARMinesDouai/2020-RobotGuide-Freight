@@ -42,7 +42,11 @@ Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :
 ```http://<PC1 ip>:8080```  
 Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous :  
 
+<<<<<<< HEAD
 ![Bureaux joignables](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_web.png)  
+=======
+[Installation](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/INSTALLATION.md)  
+>>>>>>> f1bfd1136ee1fa290fef9852e8bedbaceb828aba
 
 Les launch files et leur utilisation  
 ==
