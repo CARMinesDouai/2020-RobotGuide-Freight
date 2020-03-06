@@ -58,7 +58,7 @@
 		<node pkg="projet_fetch" type="get_and_send_desktop_to_reach.py" name="desktop_coord_publisher" />
 
 		<!-- Supress desktop data-->
-		<node pkg="projet_fetch" type="web_desktop_erase.py" name="supress_desktop"/>
+		<!--<node pkg="projet_fetch" type="web_desktop_erase.py" name="supress_desktop"/>-->
 	</group>
 	
 	<!-- Node de reconnaissance faciale pour indiquer si la personne suit bien ou non le robot --> 

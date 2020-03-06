@@ -94,12 +94,12 @@ Avec évitement d'obstacles locaux :
 ```roslaunch move_to.launch avoid:="true" web_app:="false" follower:="false"```  
 
 **Utilisation**  
-Le départ du robot se fait toujours à la [position initiale](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/tree/master/position_initiale) où il apparait sur rviz et selon la même orientation.  
-A noter que sa position initiale et son orientation est modifiable depuis RVIZ ou directement dans le launch file move_to.  
+Le départ du robot se fait toujours à la [position initiale](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/tree/master/position_initiale) où il apparait sur RVIZ et selon la même orientation.  
+A noter que sa position initiale et son orientation est modifiable temporairement depuis RVIZ ou de façon permanente directement dans le launch file move_to.  
 Une fois la commande roslaunch faite, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ.  
 
 ![2D_navGoal](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/2D_navGoal.png)  
-![Path_planner](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/Path_planner.png)   
+![Path_planner](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/Path_planner.png)  
 
 ## Application web 
 **Commande de lancement**  
@@ -154,49 +154,60 @@ La node Desktop_getName_and_sendCoord récupère alors le nom du bureau et publi
 
 ## Déplacement du robot depuis l'interface web
 
+Le rqt_graph a suivre correspond à celui affiché lorsque l'application est lancée et qu'un bureau à été sélectionné.
+
 **Rqt_graph :**  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
+![rqt_gaph_complet](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/rqt_complet.png)  
 
 **Explications :**  
+Partie web : 
+La page web correspond au node /rosbrige_websocket. On peut noter qu'elle reçoit la map
 
 Description des différentes nodes :  
 == 
  
-Les nodes sont placées dans le dossier scripts du package.  
+Les nodes à suivre sont placées dans le dossier scripts du package projet_fetch.  
 
-**Node : aim_and_pose_pub.py :**  
+### Déplacement :  
+**Node : move_to.py**  
 
-Cette node permet la publication d'un bureau objectif via le topic */aim_desktop* sous forme d'une *Pose*, il faut cependant revoir le message publié car il ne s'agit que d'un entier.  
-Elle permet aussi de publier la position du robot *base_footprint* dans la base fixe */odom*. Cette position est de type *Pose* et est publiée via le topic */robot_pose*.  
+Ce node permet le déplacement du robot d'un point A vers un point B avec des points intermédiaires.  
+Il determine la distance aux points de passage du robot au fur et à mesure, il envoie les commandes vélocité, corrigée ou non selon récéption des données du node local_avoidance.py. Ces données ne sont pas envoyées depuis un topic mais sont des paramètres modifiés internes à ros (rosparam).   
+Souscription : 
+- Le node souscrit au topic "/move_base/DWAPlannerROS/global_plan" dans l'attente des points objectifs à atteindre. Le message reçu est de type Path.  
+- Le node souscrit au topic "/new_goal" qui est un booléen. Lors de la reception de cette donnée, les paramètres sont réinitialisés et le robot s'arrête dans l'attente d'un Path.   
+- Le node souscrit au topic "/emergency_stop". Lors de la reception de la donnée, les paramètres sont réinitialisés et le robot s'arrête aussi dans l'attente d'un Path.
+- Le node souscrit au topic "/person_following". Un booléen est alors reçu qui permet de savoir si la personne suit le robot ou ne le suit plus.
+Publication :  
+- Elle publie dans le topic "/cmd_vel_mux/input/navi" pour envoyer des commandes de vitesse au robot.  
 
-**Node : Sending_path_node.py :**   
+**Node : local_avoidance.py**  
 
-Cette node permet la determination du chemin le plus court pour que le robot puisse se déplacer d'un point A vers un point B.  
-Description de son fonctionnement :  
-- La configuration des points par lesquels le robot peut/doit passer se fait directement en brut dans le fichier .py.  
-- Ensuite, cette node écoute la position du robot en permanance via le topic */robot_pose*.  
-- Elle écoute attend qu'on lui envoie le numéro du bureau que l'on veut rejoindre via le topic */aim_desktop*  
-- Enfin, elle publie sur le topic */path* et envoie un message de type *PoseArray* qui correspond à une liste de liste de *Pose* correspondants aux points par lesquels le robot doit passer.  
+Ce node récupère les données laser et modifie un rosparam qui correspond à la correction de la trajectoire du robot nécéssaire dans le cas où des objets seraient placés sur sa trajectoire.  
+Le node publie aussi un message d'arrêt d'urgence lorsqu'un obstacle est quasiment au contact de celui-ci.  
+Description de son fonctionnement :    
+- Récupération des données laser via le topic /scan.  
+- Publication sur le topic /emergency_stop.  
 
-**Node : move_to.py**
+### WEB :  
+**Node : desktop_name_publisher.py**  
+Ce node permet de publier les noms des bureaux présent dans un fichier texte contant aussi les coordonnées.   
+Il publie ces noms dans le topic /desktop_name_data.  Ces données sont utilisées pour le moment pour l'affichage des boutons dans la page web.
 
-Cette node permet le déplacement du robot d'un point A vers un point B.  
-Description de son fonctionnement : 
-- La node souscrit au topic "/path" dans l'attente de points objectifs à atteindre. Elle reçoit les points objectifs sous la forme de *PoseArray*.  
-- Elle publie dans le topic "cmd_vel" pour envoyer des commandes de vitesse au robot.  
-- La vitesse s'adapte en fonction de la distance au point.  
-- La rotation est effectuée dans un premier temps quand un point du path à été atteint et qu'il faut en rejoindre un autre. 
-- Rosparam pour la vitesse angulaire et lineaire. 
+**Node : get_and_send_desktop_to_reach.py**  
 
-**Node : local_avoidance.py**
+Ce node souscrit au topic /desktop_to_reach_name. Lorsque le nom du bureau auquel aller est reçu, il récupère les coordonnées de celui-ci dans le fichier texte et envoie cette donnée en publiant sur le topic /move_base_simple/goal pour que le path soit calculé.  
 
-Cette node récupère les données laser et corrige la trajectoire du robot dans le cas où des objets seraient placés sur sa trajectoire. 
-Description de son fonctionnement : 
-- Récupération des données laser via le topic */scan* sous forme de message *LaserScan*. 
-- 
+### Gestion des bureaux :
+**desktop_pos_creator.py**
+Ce node permet l'échange avec l'utilisateur qui voudrait faire des modifications des bureaux éxistants (Position, Nom, Existance).  
+Souscription :  
+Publication :  
 
-**Node : person_tracking.py**
+
+### Vision
+**Node : person_tracking.py**  
 
 Fonction : Suivi de personne et Reconnaissance humain
 Package : Person_tracking
@@ -250,5 +261,18 @@ Voies d'amélioration du projet :
 ==
 - Gestion de la base de donnée de bureaux plus propre directement via l'interface web  
 - Brique d'évitement plus réactive  
+
+##ANEXES 
+
+
+**Node : Sending_path_node.py :**   
+
+Cette node permet la determination du chemin le plus court pour que le robot puisse se déplacer d'un point A vers un point B.  
+Description de son fonctionnement :  
+- La configuration des points par lesquels le robot peut/doit passer se fait directement en brut dans le fichier .py.  
+- Ensuite, cette node écoute la position du robot en permanance via le topic */robot_pose*.  
+- Elle écoute attend qu'on lui envoie le numéro du bureau que l'on veut rejoindre via le topic */aim_desktop*  
+- Enfin, elle publie sur le topic */path* et envoie un message de type *PoseArray* qui correspond à une liste de liste de *Pose* correspondants aux points par lesquels le robot doit passer.  
+
 
 		
