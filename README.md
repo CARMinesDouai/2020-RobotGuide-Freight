@@ -2,6 +2,8 @@
 
 ### Developpeurs : Arthur Josi - Thibaut Desfachelles 
 
+### Encadrants : L.Fabresse - N.Bouraqadi - G.Lozenguez
+
 Description du projet :
 ==
 L'objectif de ce projet est de travailler avec un robot Turtlebot et d'en faire un robot d'acceuil.  
@@ -23,6 +25,12 @@ Installation du projet - Configuration de l'environnement
 
 [Installation du projet et configuration de l'environnement](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/INSTALLATION.md)  
 
+
+Vidéo de présentation du projet
+==
+
+[Lien Vidéo](mettrelelienICI)
+
 Lancer la démo 
 ==
 ### Commandes de lancement : 
@@ -43,6 +51,7 @@ Selection du bureau à rejoindre via l'un des différents bouttons de l'interfac
 
 Les launch files et leur utilisation  
 ==
+
 
 ## Gestion des bureaux présents dans le bâtiment via console 
 **Commande de lancement**  
@@ -240,18 +249,29 @@ Pistes d'améliorations:
 - Ajout de la possibilité d'une prise de photo permanente (Pour l'instant, possibilité d'ajouter une photo seulement après le lancement du programme)  
 - Amélioration du calcul de distance de la personne et utilisation pour la brique de navigation move_to.py  
 
-
-Vidéo de présentation du projet :
+Voies d'amélioration du projet
 ==
 
-[Lien Vidéo](mettrelelienICI)
+**La brique d'évitement :**   
+- Il semble que certaines situations restent problématique bien qu'elles soient difficile à cerner. Peut-être faudrait-il forcer un peu plus la réorientation vers le point objectif après la correction d'évitement.  
+- La visualisation des obstacles est peut être parfois un peut trop tardive.  
+- Lorsque la vitesse du robot est augmentée, l'évitement peut alors poser problème. Il faudrait que les paramètres de vitesse soient configurables de façon externe au script et que les paramètres d'évitement soient calculés en fonction.  
 
-Voies d'amélioration du projet :
+**Le path planner :**  
+- Le robot n'est pour le moment pas capable de se sortir d'une situation où la voie est bloquée de façon imprévue. L'idéal serait qu'il recalcule un autre chemin dans cette situation.  
+
+**Page web :**  
+- Dans l'idée, la gestion des bureaux et de leur base de donnée pourrait-être faite totalement depuis la page web. On peut envisager d'envoyer les points de position des bureaux par la page web en selectionnant dans la carte affichée directement et de rentrer leurs noms ensuite.
+
+**Vision :** 
+- Augmentation rapidité de reconnaissance grâce aux partages des calculs sur la Neural Compute Stick 2 ou de l'utilisation du Multithreading.  
+- Ajout de la possibilité d'une prise de photo permanente (Pour l'instant, possibilité d'ajouter une photo seulement après le lancement du programme).  
+- Amélioration du calcul de distance de la personne et utilisation pour la brique de navigation move_to.py.  
+- Utilisation d'une camera motorisée afin de pouvoir suivre la personne en permanence et ne pas la perdre de vue.
+- Amélioration de la brique réactive permettant le suivi de la personne. 
+
+ANEXES 
 ==
-- Gestion de la base de donnée de bureaux plus propre directement via l'interface web  
-- Brique d'évitement plus réactive  
-
-## ANEXES 
 
 **Node : Sending_path_node.py :**   
 

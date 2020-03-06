@@ -86,6 +86,13 @@ Voies d'amélioration
 **Page web :**  
 - Dans l'idée, la gestion des bureaux et de leur base de donnée pourrait-être faite totalement depuis la page web. On peut envisager d'envoyer les points de position des bureaux par la page web en selectionnant dans la carte affichée directement et de rentrer leurs noms ensuite.
 
+**Vision :** 
+- Augmentation rapidité de reconnaissance grâce aux partages des calculs sur la Neural Compute Stick 2 ou de l'utilisation du Multithreading.  
+- Ajout de la possibilité d'une prise de photo permanente (Pour l'instant, possibilité d'ajouter une photo seulement après le lancement du programme).  
+- Amélioration du calcul de distance de la personne et utilisation pour la brique de navigation move_to.py.  
+- Utilisation d'une camera motorisée afin de pouvoir suivre la personne en permanence et ne pas la perdre de vue.
+- Amélioration de la brique réactive permettant le suivi de la personne. 
+
 ## Annexes : 
 
 #### Configuration du robot freight 
