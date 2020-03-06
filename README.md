@@ -83,24 +83,24 @@ Quand la carte est complète, l'enregistrement de celle-ci est possible via la c
 **Visualisation**  
 La visualisation de la map en création est possible directement dans Rviz, déjà ouvert avec la commande de lancement.   
 
-![Mapping_rviz](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/mapping.png) 
+![Mapping_rviz](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/mapping.png) 
 
 
 ## Déplacement du robot vers un point objectif depuis RVIZ
 **Commande de lancement**  
 Sans évitement d'obstacles locaux :  
-```roslaunch move_to.launch avoid:="false" web_app:="false"```  
+```roslaunch move_to.launch avoid:="false" web_app:="false" follower:="false"```  
 
 Avec évitement d'obstacles locaux :  
-```roslaunch move_to.launch avoid:="true" web_app:="false"```  
+```roslaunch move_to.launch avoid:="true" web_app:="false" follower:="false"```  
 
 **Utilisation**  
-Le départ du robot se fait toujours à la position où il apparait sur rviz et selon la même orientation.  
+Le départ du robot se fait toujours à la [position initiale](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/tree/master/position_initiale) où il apparait sur rviz et selon la même orientation.  
 A noter que sa position et son orientation est modifiable.  
 Une fois la commande roslaunch faite, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ.  
 
-![2D_navGoal](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/2D_navGoal.png)  
-![Path_planner](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/Path_planner.png) 
+![2D_navGoal](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/2D_navGoal.png)  
+![Path_planner](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/Path_planner.png) 
 
 ## Application web 
 **Commande de lancement**  
@@ -125,7 +125,7 @@ Fonctionnement des launch files via rqt_graph
   
 **Rqt_graph :**  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/desktop_data_rqt.png)  
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/desktop_data_rqt.png)  
 
 **Explications :**  
 La node "desktop_manager" est la node permettant l'échange avec l'utilisateur.  
@@ -137,7 +137,7 @@ La node Desktop_getName_and_sendCoord récupère alors le nom du bureau et publi
 
 **Rqt_graph :**  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/desktop_data_rqt.png)  
 
 **Explications :**  
 
@@ -145,7 +145,7 @@ La node Desktop_getName_and_sendCoord récupère alors le nom du bureau et publi
 
 **Rqt_graph :**  
 
-![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_data_rqt.png)  
+![rqt_gaph](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/img/desktop_data_rqt.png)  
 
 **Explications :**  
 
