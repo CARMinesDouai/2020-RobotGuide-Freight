@@ -26,79 +26,10 @@ Pour le moment :
 Thibaut Desfachelles : Partie vision - Suivi et tracking  
 Arthur JOSI : Partie déplacement - Partie web 
 
-Configuration de l'environnement :
+Configuration de l'environnement - Installation du projet :
 ==
 
-**Prérequis d'utilisation :**  
-Il est nécéssaire d'être sous kinetic pour le bon fonctionnement des parties à suivre.  
-Le tutoriel pour le Turtlebot Bringup doit avoir été complété.  
-
-**Configuration du bashrc :**  
-Ouverture du fichier :  
-```cd ~/.bashrc```  
-Ajout de cette ligne en fin de fichier :  
-```source $HOME/catkin_ws/devel/setup.bash``` 
-
-**Installer le nécessaire pour la partie web**  
- ```sudo apt install ros-kinetic-rosbridge-server ros-kinetic-robot-pose-publisher```  
- ```sudo apt install nodejs-legacy```  
- ```sudo apt install ros-kinetic-web-video-server```  
-
-**Installation des librairies pour la partie vision**  
-Verifiez la version de python utilisée:  
-Dlib:  
-```pip3 install dlib```  
-OpenCV:  
-```pip3 install opencv-python```  
-Pillow:  
-```pip3 install pillow```  
-Numpy:  
-```pip3 install numpy```  
-Imutils:  
-```pip3 install imutils```  
-Argparse:  
-```pip3 install argparse```  
-os:  
-```pip3 install os```  
-rospy:  
-```pip3 install rospy```  
-ntpath:  
-```pip3 install ntpath```  
-pyrealsense2:  
-```pip3 install pyrealsense2```  
-
-**Installation du projet :**  
-```cd```  
-```git clone https://github.com/CARMinesDouai/2020-RobotGuide-Freight.git```  
-Ajout des liens symboliques dans catkin :  
-```cd <catkin_repo>/src```  
-```ln -s <2020-RobotGuide-Freight>/src/person_following/```  
-```ln -s <2020-RobotGuide-Freight>/src/projet_fetch/```  
-```ln -s <2020-RobotGuide-Freight>/src/turtlebot_web-master/```  
-
-**Optionel : Lancer nodes sur 2 PC distincts avec un master commun**  
-Nous avons utilisé cette méthode pour lancer le node de détéction sur un autre PC et ainsi améliorer la vitesse de traîtement des données. 
-- Ouvrir le fichier bashrc:  
-``` gedit ~/.bashrc```  
-- Ajoutez les lignes ci dessous à la fin du fichier:  
-export ROS_IP=`hostname -I`  
-export ROS_MASTER_URI=http://<adresse ip du master>:11311  
-- Ouvrir le fichier hosts:  
-```sudo gedit /etc/hosts```  
-- Ajouter le nom du pc:
-```<adresse ip du pc distant> <nom du pc distant>```  
-
-#### A mettre dans les annexes
-- Ouvrir le fichier bashrc :  
-    ```cd ~/.bashrc```  
-- Copier les lignes suivantes en fin de fichier :  
-    ```export ROS_MASTER_URI=http://freight100.local:11311```  
-    ```export ROS_IP=<my_address_ip>```  
-
-- Ouvrir ensuite le fichier hosts :  
-    ```sudo nano /etc/hosts```  
-- Ajouter l'invité correspondant au robot :   
-    ```10.1.16.68	freight100```  
+![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_manager.png)  
 
 Les launch files et leur utilisation  
 ==
@@ -156,8 +87,8 @@ Le départ du robot se fait toujours à la position où il apparait sur rviz et 
 A noter que sa position et son orientation est modifiable.  
 Une fois la commande roslaunch faite, il ne reste qu'a envoyer des *2D Nav Goal* depuis l'interface RVIZ.  
 
-![2D_navGoal](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/2D_navGoal.png)  
-![Path_planner](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/Path_planner.png) 
+![2D_navGoal](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/2D_navGoal.png)  
+![Path_planner](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/Rapport_activit%C3%A9/img/Path_planner.png) 
 
 ## Application web 
 **Commande de lancement**  
