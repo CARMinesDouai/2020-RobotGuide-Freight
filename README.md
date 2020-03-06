@@ -29,7 +29,7 @@ Arthur JOSI : Partie déplacement - Partie web
 Configuration de l'environnement - Installation du projet :
 ==
 
-![Console_desktop_manager](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/installation.md)  
+[Installation]<https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/INSTALLATION.md>  
 
 Les launch files et leur utilisation  
 ==
