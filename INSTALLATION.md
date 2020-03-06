@@ -1,7 +1,7 @@
 **Prérequis d'utilisation :**  
 Il est nécéssaire d'être sous kinetic et Ubuntu 16.04 pour le bon fonctionnement du projet.  
-[Installer et configuer son environnement ROS] (http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment) doit avoir été fait.   
-Le tutoriel [Turtlebot Bringup] (http://wiki.ros.org/turtlebot_bringup/Tutorials/indigo/TurtleBot%20Bringup) doit avoir été complété.  
+[Installer et configuer son environnement ROS](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment) doit avoir été fait.   
+Le tutoriel [Turtlebot Bringup](http://wiki.ros.org/turtlebot_bringup/Tutorials/indigo/TurtleBot%20Bringup) doit avoir été complété.  
 
 
 **Configuration du bashrc :**  

@@ -4,32 +4,45 @@
 
 Description du projet :
 ==
-L'objectif de ce projet est de travailler avec un robot et d'en faire un robot d'acceuil.  
+L'objectif de ce projet est de travailler avec un robot Turtlebot et d'en faire un robot d'acceuil.  
 
-Le fonctionnement du robot à l'aboutissement du projet est donc le suivant :  
+Les fonctionnalités sont les suivantes:  
 
-- Un utilisateur doit pouvoir selectionner le bureau de la personne qu'il veut rejoindre sur une interface graphique (Sur une tablette par exemple).  
-- Le robot doit accompagner la personne au bureau demandé. Il doit donc prendre le chemin le plus efficace et s'arrêter une fois arrivé.  
-- Au cours du trajet, le robot doit être capable d'éviter des objets imprévus à l'origine (Comme une personne ou un carton par exemple).  
-- Des capteur doivent permettre d'indiquer la présence de la personne supposée le suivre. Effectivement, le robot doit s'arrêter si la personne ne suit plus (Si elle s'arrête pour discutter avec une autre personne par exemple.)
-- Le robot doit éventuellement être capable de suivre une personne dans le batîment.
+- Un utilisateur peut selectionner le bureau de la personne qu'il veut rejoindre sur une interface web.  
+- Le robot accompagne alors la personne au bureau demandé. Il prend bien entendu le chemin le plus efficace.  
+- Le robot est capable d'éviter des obstacles locaux (Comme une personne ou un carton par exemple) à l'aide d'un capteur de distance à ballayage.  
+- Des capteur doivent permettre d'indiquer la présence de la personne supposée le suivre. Effectivement, le robot doit s'arrêter si la personne ne suit plus (Si elle s'arrête pour discutter avec une autre personne par exemple.)  
+- Une caméra réalsense permet d'indiquer la présence de la personne supposée suivre le robot. Le robot s'arrête alrs si la personne ne le suit plus (Si elle s'arrête pour discutter avec une autre personne par exemple.  
 
 Ces objectifs de fonctionnement décomposent donc le projet en trois grandes parties :  
 - La brique de déplacement réactive du robot permettant d'aller d'un bureau à un autre  
-- La brique de vision du robot permettant de s'assurer le suivi de la personne interessée ou de suivre cette personne dans le bâtiment.  
-- La brique d'interaction avec l'utilisateur permettant donc à celui-ci de choisir le bureau de la personne qu'il veut rejoindre.  
+- La brique de vision du robot permettant de s'assurer le suivi de la personne interessée.  
+- La brique d'interaction avec l'utilisateur permettant à celui-ci de choisir le bureau de la personne qu'il veut rejoindre.  
 
-Répartission du travail : 
-==
-Au cours de ce projet, nous souhaitons avoir une certaine vision sur les parties que nous traitons l'un l'autre. Nous allons donc nous informer des différentes avancées tout au long de celui-ci.  
-Pour le moment :  
-Thibaut Desfachelles : Partie vision - Suivi et tracking  
-Arthur JOSI : Partie déplacement - Partie web 
-
-Configuration de l'environnement - Installation du projet :
+Installation du projet - Configuration de l'environnement
 ==
 
-[Installation] (https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/INSTALLATION.md)  
+[Installation du projet et configuration de l'environnement](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/INSTALLATION.md)  
+
+Lancer la démo 
+==
+**Commande de lancement :**  
+Démo complète sur un pc (Problème possible de performance):  
+```roslaunch projet_fetch move_to.launch avoid:="True" web_app:="True" follower:="True"```  
+
+Démo sur deux pc distincs (Délocalisation de la reconnaissance faciale) :  
+Ajout de la reconnaissance faciale (Pour notre utilisation, lancée sur un autre pc):  
+- PC 1 :  
+```roslaunch projet_fetch move_to.launch avoid:="True" web_app:="True" follower:="False"```  
+- PC 2 : 
+```roslaunch person_following person_following.launch```  
+
+**Utilisation :**
+Ouverture du navigateur avec l'url correspondant à l'adresse ip du lanceur :  
+```http://<PC1 ip>:8080```  
+Selection du bureau à rejoindre via l'un des différents bouttons affichés à l'écran comme ci dessous :  
+
+![Bureaux joignables](https://github.com/CARMinesDouai/2020-RobotGuide-Freight/blob/master/src/img/desktop_web.png)  
 
 Les launch files et leur utilisation  
 ==
